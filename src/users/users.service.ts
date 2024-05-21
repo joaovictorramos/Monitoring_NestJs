@@ -2,15 +2,15 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { UsersUpdateDto } from './dto/users.update.dto';
-import { UsersCreateDto } from './dto/users.create.dto';
+import { UsersUpdateDto } from './dto/update-users.dto';
+import { UsersCreateDto } from './dto/create-users.dto';
 import { UsersEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  InvalidRoleException,
+  InvalidUserRoleException,
   NoUsersFoundException,
   UserAlreadyExistsException,
-} from './exceptions/UsersExceptions';
+} from './exceptions/users.exceptions';
 
 @Injectable()
 export class UsersService {
@@ -29,7 +29,7 @@ export class UsersService {
     }
 
     if (!['PROFESSOR', 'ALUNO'].includes(usersDto.office)) {
-      throw new InvalidRoleException();
+      throw new InvalidUserRoleException();
     }
 
     const user = new UsersEntity();
@@ -67,6 +67,11 @@ export class UsersService {
     if (!user) {
       throw new NoUsersFoundException();
     }
+
+    if (!['PROFESSOR', 'ALUNO'].includes(usersDto.office)) {
+      throw new InvalidUserRoleException();
+    }
+
     Object.assign(user, usersDto);
     return await this.usersRepository.save(user);
   }

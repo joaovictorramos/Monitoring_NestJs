@@ -15,7 +15,7 @@ export class UserAlreadyExistsException extends HttpException {
   }
 }
 
-export class InvalidRoleException extends HttpException {
+export class InvalidUserRoleException extends HttpException {
   constructor() {
     super(
       'Invalid role value. Allowed value: "PROFESSOR" or "ALUNO"',

@@ -5,6 +5,8 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { UsersEntity } from './users/entities/user.entity';
+import { ClassroomModule } from './classroom/classroom.module';
+import { ClassroomEntity } from './classroom/entities/classroom.entity';
 
 @Module({
   imports: [
@@ -16,10 +18,11 @@ import { UsersEntity } from './users/entities/user.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [UsersEntity],
+      entities: [UsersEntity, ClassroomEntity],
       synchronize: false,
     }),
     UsersModule,
+    ClassroomModule,
   ],
   controllers: [AppController],
   providers: [AppService],

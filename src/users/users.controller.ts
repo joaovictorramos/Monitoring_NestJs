@@ -10,10 +10,10 @@ import {
   HttpCode,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-import { UsersCreateDto } from './dto/users.create.dto';
+import { UsersCreateDto } from './dto/create-users.dto';
 import { UsersEntity } from './entities/user.entity';
-import { ValidateCredentialsPipe } from './pipes/UsersPipes';
-import { UsersUpdateDto } from './dto/users.update.dto';
+import { ValidateCredentialsPipe } from './pipes/users.pipes';
+import { UsersUpdateDto } from './dto/update-users.dto';
 
 @Controller('users')
 export class UsersController {

@@ -5,7 +5,7 @@ import {
   ArgumentMetadata,
   BadRequestException,
 } from '@nestjs/common';
-import { MissingCredentialsException } from '../exceptions/UsersExceptions';
+import { MissingCredentialsException } from '../exceptions/users.exceptions';
 
 @Injectable()
 export class ValidateCredentialsPipe implements PipeTransform {
