@@ -1,3 +1,4 @@
+import { ClassroomReturnDto } from 'src/classroom/dto/return-classroom.dto';
 import { UsersReturnDto } from 'src/users/dto/return-users.dto';
 
 export class MonitorReturnDto {
@@ -11,4 +12,5 @@ export class MonitorReturnDto {
   startHour: Date;
   endHour: Date;
   users?: UsersReturnDto;
+  classrooms?: ClassroomReturnDto;
 }

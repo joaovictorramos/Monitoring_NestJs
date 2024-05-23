@@ -1,3 +1,4 @@
+import { ClassroomReturnDto } from './../classroom/dto/return-classroom.dto';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { CreateMonitorDto } from './dto/create-monitor.dto';
@@ -109,7 +110,7 @@ export class MonitorService {
   async findOne(id: string) {
     const monitor = await this.monitorRepository.findOne({
       where: { id: id },
-      relations: ['usersId'],
+      relations: ['usersId', 'classroomId'],
     });
     if (!monitor) {
       throw new NotFoundException('No monitor found');
@@ -137,6 +138,16 @@ export class MonitorService {
       };
       monitorReturnDto.users = usersReturnDto;
     }
+    if (monitor.classroomId) {
+      const classroomReturnDto: ClassroomReturnDto = {
+        id: monitor.classroomId.id,
+        name: monitor.classroomId.name,
+        block: monitor.classroomId.block,
+        type: monitor.classroomId.type,
+        isReserved: monitor.classroomId.isReserved,
+      };
+      monitorReturnDto.classrooms = classroomReturnDto;
+    }
 
     return monitorReturnDto;
   }
@@ -150,30 +161,34 @@ export class MonitorService {
       throw new NotFoundException('No monitor found');
     }
 
-    const typeOfMonitoringList = [
-      'PRESENCIAL',
-      'REMOTO',
-      'PRESENCIAL E REMOTO',
-    ];
-    if (!typeOfMonitoringList.includes(monitorDto.typeOfMonitoring)) {
-      throw new InvalidRoleException(
-        'Invalid role value. Allowed value: "PRESENCIAL", "REMOTO" or "PRESENCIAL E REMOTO"',
-      );
+    if (monitorDto.typeOfMonitoring !== undefined) {
+      const typeOfMonitoringList = [
+        'PRESENCIAL',
+        'REMOTO',
+        'PRESENCIAL E REMOTO',
+      ];
+      if (!typeOfMonitoringList.includes(monitorDto.typeOfMonitoring)) {
+        throw new InvalidRoleException(
+          'Invalid role value. Allowed value: "PRESENCIAL", "REMOTO" or "PRESENCIAL E REMOTO"',
+        );
+      }
     }
 
-    const daysOfTheWeekList = [
-      'DOMINGO',
-      'SEGUNDA-FEIRA',
-      'TERÇA-FEIRA',
-      'QUARTA-FEIRA',
-      'QUINTA-FEIRA',
-      'SEXTA-FEIRA',
-      'SÁBADO',
-    ];
-    if (!daysOfTheWeekList.includes(monitorDto.daysOfTheWeek)) {
-      throw new InvalidRoleException(
-        'Invalid role value. Allowed value: "DOMINGO", "SEGUNDA=FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA" or "SÁBADO".',
-      );
+    if (monitorDto.daysOfTheWeek !== undefined) {
+      const daysOfTheWeekList = [
+        'DOMINGO',
+        'SEGUNDA-FEIRA',
+        'TERÇA-FEIRA',
+        'QUARTA-FEIRA',
+        'QUINTA-FEIRA',
+        'SEXTA-FEIRA',
+        'SÁBADO',
+      ];
+      if (!daysOfTheWeekList.includes(monitorDto.daysOfTheWeek)) {
+        throw new InvalidRoleException(
+          'Invalid role value. Allowed value: "DOMINGO", "SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA" or "SÁBADO".',
+        );
+      }
     }
 
     Object.assign(monitor, monitorDto);
