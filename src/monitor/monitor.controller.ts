@@ -30,7 +30,7 @@ export class MonitorController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.monitorService.findOne(+id);
+    return this.monitorService.findOne(id);
   }
 
   @Patch(':id')

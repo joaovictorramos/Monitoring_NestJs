@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateMonitorDto } from './dto/create-monitor.dto';
 import { UpdateMonitorDto } from './dto/update-monitor.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -11,6 +11,8 @@ import {
   AlreadyExistsException,
 } from '../exceptions/entity.exceptions';
 import { UsersService } from 'src/users/users.service';
+import { UsersReturnDto } from 'src/users/dto/return-users.dto';
+import { MonitorReturnDto } from './dto/return-monitor.dto';
 
 @Injectable()
 export class MonitorService {
@@ -82,12 +84,47 @@ export class MonitorService {
     return await this.monitorRepository.save(monitor);
   }
 
-  findAll() {
-    return `This action returns all monitor`;
+  async findAll(): Promise<MonitorEntity[]> {
+    const monitors = await this.monitorRepository.find();
+    if (!monitors.length) {
+      throw new NotFoundException('No monitors found');
+    }
+    return monitors;
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} monitor`;
+  async findOne(id: string) {
+    const monitor = await this.monitorRepository.findOne({
+      where: { id: id },
+      relations: ['usersId'],
+    });
+    if (!monitor) {
+      throw new NotFoundException('No monitors found');
+    }
+
+    const monitorReturnDto: MonitorReturnDto = {
+      id: monitor.id,
+      registration: monitor.registration,
+      name: monitor.name,
+      actualPeriod: monitor.actualPeriod,
+      institutionalEmail: monitor.institutionalEmail,
+      typeOfMonitoring: monitor.typeOfMonitoring,
+      daysOfTheWeek: monitor.daysOfTheWeek,
+      startHour: monitor.startHour,
+      endHour: monitor.endHour,
+    };
+
+    if (monitor.usersId) {
+      const usersReturnDto: UsersReturnDto = {
+        id: monitor.usersId.id,
+        name: monitor.usersId.name,
+        login: monitor.usersId.login,
+        password: monitor.usersId.password,
+        office: monitor.usersId.office,
+      };
+      monitorReturnDto.users = usersReturnDto;
+    }
+
+    return monitorReturnDto;
   }
 
   update(id: number, updateMonitorDto: UpdateMonitorDto) {
