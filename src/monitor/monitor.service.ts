@@ -5,7 +5,7 @@ import { UpdateMonitorDto } from './dto/update-monitor.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { MonitorEntity } from './entities/monitor.entity';
 import { v4 as uuidv4 } from 'uuid';
-import { Repository } from 'typeorm';
+import { Not, Repository } from 'typeorm';
 import {
   InvalidRoleException,
   AlreadyExistsException,
@@ -98,7 +98,7 @@ export class MonitorService {
       relations: ['usersId'],
     });
     if (!monitor) {
-      throw new NotFoundException('No monitors found');
+      throw new NotFoundException('No monitor found');
     }
 
     const monitorReturnDto: MonitorReturnDto = {
@@ -127,11 +127,49 @@ export class MonitorService {
     return monitorReturnDto;
   }
 
-  update(id: number, updateMonitorDto: UpdateMonitorDto) {
-    return `This action updates a #${id} monitor`;
+  async update(
+    id: string,
+    monitorDto: UpdateMonitorDto,
+  ): Promise<MonitorEntity> {
+    const monitor = await this.monitorRepository.findOne({ where: { id: id } });
+    if (!monitor) {
+      throw new NotFoundException('No monitor found');
+    }
+
+    const typeOfMonitoringList = [
+      'PRESENCIAL',
+      'REMOTO',
+      'PRESENCIAL E REMOTO',
+    ];
+    if (!typeOfMonitoringList.includes(monitorDto.typeOfMonitoring)) {
+      throw new InvalidRoleException(
+        'Invalid role value. Allowed value: "PRESENCIAL", "REMOTO" or "PRESENCIAL E REMOTO"',
+      );
+    }
+
+    const daysOfTheWeekList = [
+      'DOMINGO',
+      'SEGUNDA-FEIRA',
+      'TERÇA-FEIRA',
+      'QUARTA-FEIRA',
+      'QUINTA-FEIRA',
+      'SEXTA-FEIRA',
+      'SÁBADO',
+    ];
+    if (!daysOfTheWeekList.includes(monitorDto.daysOfTheWeek)) {
+      throw new InvalidRoleException(
+        'Invalid role value. Allowed value: "DOMINGO", "SEGUNDA=FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA" or "SÁBADO".',
+      );
+    }
+
+    Object.assign(monitor, monitorDto);
+    return await this.monitorRepository.save(monitor);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} monitor`;
+  async remove(id: string) {
+    const monitor = await this.monitorRepository.delete(id);
+    if (monitor.affected === 0) {
+      throw new NotFoundException('No monitor found');
+    }
   }
 }

@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   UsePipes,
+  HttpCode,
 } from '@nestjs/common';
 import { MonitorService } from './monitor.service';
 import { CreateMonitorDto } from './dto/create-monitor.dto';
@@ -35,11 +36,12 @@ export class MonitorController {
 
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateMonitorDto: UpdateMonitorDto) {
-    return this.monitorService.update(+id, updateMonitorDto);
+    return this.monitorService.update(id, updateMonitorDto);
   }
 
   @Delete(':id')
+  @HttpCode(204)
   remove(@Param('id') id: string) {
-    return this.monitorService.remove(+id);
+    return this.monitorService.remove(id);
   }
 }
