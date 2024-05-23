@@ -1,3 +1,4 @@
+import { ClassroomEntity } from 'src/classroom/entities/classroom.entity';
 import { UsersEntity } from 'src/users/entities/user.entity';
 import {
   Column,
@@ -55,4 +56,8 @@ export class MonitorEntity {
   @ManyToOne(() => UsersEntity, (users) => users.monitors)
   @JoinColumn({ name: 'users_id' })
   usersId: UsersEntity;
+
+  @ManyToOne(() => ClassroomEntity, (classroom) => classroom.monitors)
+  @JoinColumn({ name: 'classroom_id' })
+  classroomId: ClassroomEntity;
 }

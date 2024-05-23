@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { CreateMonitorDto } from './dto/create-monitor.dto';
 import { UpdateMonitorDto } from './dto/update-monitor.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -13,28 +13,31 @@ import {
 import { UsersService } from 'src/users/users.service';
 import { UsersReturnDto } from 'src/users/dto/return-users.dto';
 import { MonitorReturnDto } from './dto/return-monitor.dto';
+import { ClassroomService } from './../classroom/classroom.service';
 
 @Injectable()
 export class MonitorService {
   constructor(
     @InjectRepository(MonitorEntity)
     private readonly monitorRepository: Repository<MonitorEntity>,
+    private readonly classroomService: ClassroomService,
     private readonly usersService: UsersService,
   ) {}
   async create(monitorDto: CreateMonitorDto) {
+    // Se já existe um monitor cadastrado
     const existingMonitor = await this.monitorRepository.findOne({
       where: {
         registration: monitorDto.registration,
         institutionalEmail: monitorDto.institutionalEmail,
       },
     });
-
     if (existingMonitor) {
       throw new AlreadyExistsException(
         'Monitor with the same registration or institutional email already exists',
       );
     }
 
+    // Se há usuário
     const existingUsers = await this.usersService.findOne(monitorDto.usersId);
     if (!existingUsers) {
       throw new AlreadyExistsException(
@@ -42,6 +45,15 @@ export class MonitorService {
       );
     }
 
+    // Se há sala de aula
+    let existingClassroom = await this.classroomService.findOne(
+      monitorDto.classroomId,
+    );
+    if (monitorDto.classroomId === undefined) {
+      existingClassroom = null;
+    }
+
+    // Validando o tipo de monitoria
     const typeOfMonitoringList = [
       'PRESENCIAL',
       'REMOTO',
@@ -53,6 +65,7 @@ export class MonitorService {
       );
     }
 
+    // Validando o dia da semana
     const daysOfTheWeekList = [
       'DOMINGO',
       'SEGUNDA-FEIRA',
@@ -81,6 +94,7 @@ export class MonitorService {
     monitor.startHour = monitorDto.startHour;
     monitor.endHour = monitorDto.endHour;
     monitor.usersId = existingUsers;
+    monitor.classroomId = existingClassroom;
     return await this.monitorRepository.save(monitor);
   }
 

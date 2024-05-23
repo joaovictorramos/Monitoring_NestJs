@@ -20,7 +20,7 @@ import { MonitorEntity } from './monitor/entities/monitor.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [UsersEntity, ClassroomEntity, MonitorEntity],
+      entities: [UsersEntity, ClassroomEntity, MonitorEntity, ClassroomEntity],
       synchronize: false,
     }),
     UsersModule,
