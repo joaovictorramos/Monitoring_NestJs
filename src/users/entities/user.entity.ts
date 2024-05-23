@@ -1,9 +1,11 @@
+import { MonitorEntity } from 'src/monitor/entities/monitor.entity';
 import {
   Entity,
   Column,
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  OneToMany,
 } from 'typeorm';
 
 @Entity('users')
@@ -28,4 +30,7 @@ export class UsersEntity {
 
   @UpdateDateColumn({ type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })
   updated_at: Date;
+
+  @OneToMany(() => MonitorEntity, (monitors) => monitors.usersId)
+  monitors: MonitorEntity[];
 }

@@ -7,6 +7,8 @@ import { UsersModule } from './users/users.module';
 import { UsersEntity } from './users/entities/user.entity';
 import { ClassroomModule } from './classroom/classroom.module';
 import { ClassroomEntity } from './classroom/entities/classroom.entity';
+import { MonitorModule } from './monitor/monitor.module';
+import { MonitorEntity } from './monitor/entities/monitor.entity';
 
 @Module({
   imports: [
@@ -18,11 +20,12 @@ import { ClassroomEntity } from './classroom/entities/classroom.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [UsersEntity, ClassroomEntity],
+      entities: [UsersEntity, ClassroomEntity, MonitorEntity],
       synchronize: false,
     }),
     UsersModule,
     ClassroomModule,
+    MonitorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
