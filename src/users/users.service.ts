@@ -7,10 +7,10 @@ import { UsersCreateDto } from './dto/create-users.dto';
 import { UsersEntity } from './entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import {
-  InvalidUserRoleException,
-  NoUsersFoundException,
-  UserAlreadyExistsException,
-} from './exceptions/users.exceptions';
+  InvalidRoleException,
+  NotFoundException,
+  AlreadyExistsException,
+} from '../exceptions/entity.exceptions';
 
 @Injectable()
 export class UsersService {
@@ -25,11 +25,15 @@ export class UsersService {
     });
 
     if (existingUser) {
-      throw new UserAlreadyExistsException();
+      throw new AlreadyExistsException(
+        'User with the same login and password already exists',
+      );
     }
 
     if (!['PROFESSOR', 'ALUNO'].includes(usersDto.office)) {
-      throw new InvalidUserRoleException();
+      throw new InvalidRoleException(
+        'Invalid role value. Allowed value: "PROFESSOR" or "ALUNO"',
+      );
     }
 
     const user = new UsersEntity();
@@ -46,7 +50,7 @@ export class UsersService {
   async findAll(): Promise<UsersEntity[]> {
     const users = await this.usersRepository.find();
     if (!users.length) {
-      throw new NoUsersFoundException();
+      throw new NotFoundException('No users found');
     }
     return users;
   }
@@ -54,7 +58,7 @@ export class UsersService {
   async findOne(id: string) {
     const user = await this.usersRepository.findOne({ where: { id: id } });
     if (!user) {
-      throw new NoUsersFoundException();
+      throw new NotFoundException('No users found');
     }
     return user;
   }
@@ -65,11 +69,13 @@ export class UsersService {
   ): Promise<UsersEntity> {
     const user = await this.usersRepository.findOne({ where: { id: id } });
     if (!user) {
-      throw new NoUsersFoundException();
+      throw new NotFoundException('No users found');
     }
 
     if (!['PROFESSOR', 'ALUNO'].includes(usersDto.office)) {
-      throw new InvalidUserRoleException();
+      throw new InvalidRoleException(
+        'Invalid role value. Allowed value: "PROFESSOR" or "ALUNO"',
+      );
     }
 
     Object.assign(user, usersDto);
@@ -79,7 +85,7 @@ export class UsersService {
   async remove(id: string): Promise<void> {
     const user = await this.usersRepository.delete(id);
     if (user.affected === 0) {
-      throw new NoUsersFoundException();
+      throw new NotFoundException('No users found');
     }
   }
 }

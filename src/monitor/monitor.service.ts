@@ -7,11 +7,10 @@ import { MonitorEntity } from './entities/monitor.entity';
 import { v4 as uuidv4 } from 'uuid';
 import { Repository } from 'typeorm';
 import {
-  InvalidMonitorRoleException,
-  MonitorAlreadyExistsException,
-} from './exceptions/monitor.exceptions';
+  InvalidRoleException,
+  AlreadyExistsException,
+} from '../exceptions/entity.exceptions';
 import { UsersService } from 'src/users/users.service';
-import { UserAlreadyExistsException } from 'src/users/exceptions/users.exceptions';
 
 @Injectable()
 export class MonitorService {
@@ -29,12 +28,16 @@ export class MonitorService {
     });
 
     if (existingMonitor) {
-      throw new MonitorAlreadyExistsException();
+      throw new AlreadyExistsException(
+        'Monitor with the same registration or institutional email already exists',
+      );
     }
 
     const existingUsers = await this.usersService.findOne(monitorDto.usersId);
     if (!existingUsers) {
-      throw new UserAlreadyExistsException();
+      throw new AlreadyExistsException(
+        'User with the same login and password already exists',
+      );
     }
 
     const typeOfMonitoringList = [
@@ -43,7 +46,7 @@ export class MonitorService {
       'PRESENCIAL E REMOTO',
     ];
     if (!typeOfMonitoringList.includes(monitorDto.typeOfMonitoring)) {
-      throw new InvalidMonitorRoleException(
+      throw new InvalidRoleException(
         'Invalid role value. Allowed value: "PRESENCIAL", "REMOTO" or "PRESENCIAL E REMOTO"',
       );
     }
@@ -58,7 +61,7 @@ export class MonitorService {
       'SÁBADO',
     ];
     if (!daysOfTheWeekList.includes(monitorDto.daysOfTheWeek)) {
-      throw new InvalidMonitorRoleException(
+      throw new InvalidRoleException(
         'Invalid role value. Allowed value: "DOMINGO", "SEGUNDA=FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA" or "SÁBADO".',
       );
     }
