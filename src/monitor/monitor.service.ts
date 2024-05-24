@@ -41,9 +41,7 @@ export class MonitorService {
     // Se há usuário
     const existingUsers = await this.usersService.findOne(monitorDto.usersId);
     if (!existingUsers) {
-      throw new AlreadyExistsException(
-        'User with the same login and password already exists',
-      );
+      throw new NotFoundException('No Users found');
     }
 
     // Se há sala de aula
