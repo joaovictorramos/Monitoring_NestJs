@@ -55,31 +55,35 @@ export class MonitorService {
     }
 
     // Validando o tipo de monitoria
-    const typeOfMonitoringList = [
-      'PRESENCIAL',
-      'REMOTO',
-      'PRESENCIAL E REMOTO',
-    ];
-    if (!typeOfMonitoringList.includes(monitorDto.typeOfMonitoring)) {
-      throw new InvalidRoleException(
-        'Invalid role value. Allowed value: "PRESENCIAL", "REMOTO" or "PRESENCIAL E REMOTO"',
-      );
+    if (monitorDto.typeOfMonitoring !== undefined) {
+      const typeOfMonitoringList = [
+        'PRESENCIAL',
+        'REMOTO',
+        'PRESENCIAL E REMOTO',
+      ];
+      if (!typeOfMonitoringList.includes(monitorDto.typeOfMonitoring)) {
+        throw new InvalidRoleException(
+          'Invalid role value. Allowed value: "PRESENCIAL", "REMOTO" or "PRESENCIAL E REMOTO"',
+        );
+      }
     }
 
     // Validando o dia da semana
-    const daysOfTheWeekList = [
-      'DOMINGO',
-      'SEGUNDA-FEIRA',
-      'TERÇA-FEIRA',
-      'QUARTA-FEIRA',
-      'QUINTA-FEIRA',
-      'SEXTA-FEIRA',
-      'SÁBADO',
-    ];
-    if (!daysOfTheWeekList.includes(monitorDto.daysOfTheWeek)) {
-      throw new InvalidRoleException(
-        'Invalid role value. Allowed value: "DOMINGO", "SEGUNDA=FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA" or "SÁBADO".',
-      );
+    if (monitorDto.daysOfTheWeek !== undefined) {
+      const daysOfTheWeekList = [
+        'DOMINGO',
+        'SEGUNDA-FEIRA',
+        'TERÇA-FEIRA',
+        'QUARTA-FEIRA',
+        'QUINTA-FEIRA',
+        'SEXTA-FEIRA',
+        'SÁBADO',
+      ];
+      if (!daysOfTheWeekList.includes(monitorDto.daysOfTheWeek)) {
+        throw new InvalidRoleException(
+          'Invalid role value. Allowed value: "DOMINGO", "SEGUNDA=FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA" or "SÁBADO".',
+        );
+      }
     }
 
     const monitor = new MonitorEntity();
