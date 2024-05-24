@@ -20,8 +20,8 @@ export class MonitorController {
 
   @Post()
   @UsePipes(new ValidateMonitorCredentialsPipe())
-  create(@Body() createMonitorDto: CreateMonitorDto) {
-    return this.monitorService.create(createMonitorDto);
+  create(@Body() monitorDto: CreateMonitorDto) {
+    return this.monitorService.create(monitorDto);
   }
 
   @Get()
@@ -35,8 +35,8 @@ export class MonitorController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateMonitorDto: UpdateMonitorDto) {
-    return this.monitorService.update(id, updateMonitorDto);
+  update(@Param('id') id: string, @Body() monitorDto: UpdateMonitorDto) {
+    return this.monitorService.update(id, monitorDto);
   }
 
   @Delete(':id')

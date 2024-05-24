@@ -33,11 +33,11 @@ export class MonitorEntity {
   @Column({ name: 'days_of_the_week' })
   daysOfTheWeek: string;
 
-  @Column({ name: 'start_hour' })
-  startHour: Date;
+  @Column({ name: 'start_hour', type: 'time' })
+  startHour: string;
 
-  @Column({ name: 'end_hour' })
-  endHour: Date;
+  @Column({ name: 'end_hour', type: 'time' })
+  endHour: string;
 
   @CreateDateColumn({
     name: 'created_at',

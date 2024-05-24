@@ -9,6 +9,8 @@ import { ClassroomModule } from './classroom/classroom.module';
 import { ClassroomEntity } from './classroom/entities/classroom.entity';
 import { MonitorModule } from './monitor/monitor.module';
 import { MonitorEntity } from './monitor/entities/monitor.entity';
+import { MatterModule } from './matter/matter.module';
+import { MatterEntity } from './matter/entities/matter.entity';
 
 @Module({
   imports: [
@@ -20,12 +22,19 @@ import { MonitorEntity } from './monitor/entities/monitor.entity';
       username: process.env.DB_USERNAME,
       password: process.env.DB_PASSWORD,
       database: process.env.DB_DATABASE,
-      entities: [UsersEntity, ClassroomEntity, MonitorEntity, ClassroomEntity],
+      entities: [
+        UsersEntity,
+        ClassroomEntity,
+        MonitorEntity,
+        ClassroomEntity,
+        MatterEntity,
+      ],
       synchronize: false,
     }),
     UsersModule,
     ClassroomModule,
     MonitorModule,
+    MatterModule,
   ],
   controllers: [AppController],
   providers: [AppService],

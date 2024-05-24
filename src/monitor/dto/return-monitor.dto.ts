@@ -9,8 +9,8 @@ export class MonitorReturnDto {
   institutionalEmail: string;
   typeOfMonitoring: string;
   daysOfTheWeek: string;
-  startHour: Date;
-  endHour: Date;
+  startHour: string;
+  endHour: string;
   users?: UsersReturnDto;
   classrooms?: ClassroomReturnDto;
 }
