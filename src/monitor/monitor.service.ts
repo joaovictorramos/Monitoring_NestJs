@@ -1,6 +1,3 @@
-import { MatterReturnDto } from './../matter/dto/return-matter.dto';
-import { MatterService } from './../matter/matter.service';
-import { ClassroomReturnDto } from './../classroom/dto/return-classroom.dto';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
 import { CreateMonitorDto } from './dto/create-monitor.dto';
@@ -17,6 +14,9 @@ import { UsersService } from 'src/users/users.service';
 import { UsersReturnDto } from 'src/users/dto/return-users.dto';
 import { MonitorReturnDto } from './dto/return-monitor.dto';
 import { ClassroomService } from './../classroom/classroom.service';
+import { MatterReturnDto } from './../matter/dto/return-matter.dto';
+import { MatterService } from './../matter/matter.service';
+import { ClassroomReturnDto } from './../classroom/dto/return-classroom.dto';
 
 @Injectable()
 export class MonitorService {
@@ -186,6 +186,28 @@ export class MonitorService {
     const monitor = await this.monitorRepository.findOne({ where: { id: id } });
     if (!monitor) {
       throw new NotFoundException('No monitor found');
+    }
+
+    // Se há usuário
+    const existingUsers = await this.usersService.findOne(monitorDto.usersId);
+    if (!existingUsers) {
+      throw new NotFoundException('No users found');
+    }
+
+    // Se há matéria
+    const existingMatters = await this.matterService.findOne(
+      monitorDto.matterId,
+    );
+    if (!existingMatters) {
+      throw new NotFoundException('No matter found');
+    }
+
+    // Se há sala de aula
+    let existingClassroom = await this.classroomService.findOne(
+      monitorDto.classroomId,
+    );
+    if (monitorDto.classroomId === undefined) {
+      existingClassroom = null;
     }
 
     if (monitorDto.typeOfMonitoring !== undefined) {

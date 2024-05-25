@@ -35,7 +35,6 @@ export class MatterController {
   }
 
   @Patch(':id')
-  @UsePipes(new ValidateMatterCredentialsPipe())
   update(@Param('id') id: string, @Body() matterDto: UpdateMatterDto) {
     return this.matterService.update(id, matterDto);
   }

@@ -36,7 +36,6 @@ export class UsersController {
   }
 
   @Patch(':id')
-  @UsePipes(new ValidateCredentialsPipe())
   update(
     @Param('id') id: string,
     @Body() usersDto: Partial<UsersUpdateDto>,

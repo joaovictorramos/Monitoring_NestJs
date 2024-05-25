@@ -32,4 +32,16 @@ export class UpdateMonitorDto {
   @IsOptional()
   @IsString()
   readonly endHour?: string;
+
+  @IsOptional()
+  @IsString()
+  readonly usersId: string;
+
+  @IsOptional()
+  @IsString()
+  readonly classroomId: string;
+
+  @IsOptional()
+  @IsString()
+  readonly matterId: string;
 }
