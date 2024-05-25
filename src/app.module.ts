@@ -11,6 +11,8 @@ import { MonitorModule } from './monitor/monitor.module';
 import { MonitorEntity } from './monitor/entities/monitor.entity';
 import { MatterModule } from './matter/matter.module';
 import { MatterEntity } from './matter/entities/matter.entity';
+import { AbsenceModule } from './absence/absence.module';
+import { AbsenceEntity } from './absence/entities/absence.entity';
 
 @Module({
   imports: [
@@ -28,6 +30,7 @@ import { MatterEntity } from './matter/entities/matter.entity';
         MonitorEntity,
         ClassroomEntity,
         MatterEntity,
+        AbsenceEntity,
       ],
       synchronize: false,
     }),
@@ -35,6 +38,7 @@ import { MatterEntity } from './matter/entities/matter.entity';
     ClassroomModule,
     MonitorModule,
     MatterModule,
+    AbsenceModule,
   ],
   controllers: [AppController],
   providers: [AppService],
