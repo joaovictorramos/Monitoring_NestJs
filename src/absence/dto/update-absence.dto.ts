@@ -1,4 +1,15 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateAbsenceDto } from './create-absence.dto';
+import { IsOptional, IsString } from 'class-validator';
 
-export class UpdateAbsenceDto extends PartialType(CreateAbsenceDto) {}
+export class UpdateAbsenceDto {
+  @IsOptional()
+  @IsString()
+  readonly date: string;
+
+  @IsOptional()
+  @IsString()
+  readonly justification: string;
+
+  @IsOptional()
+  @IsString()
+  readonly monitorId: string;
+}

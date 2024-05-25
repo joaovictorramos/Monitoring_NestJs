@@ -179,6 +179,18 @@ export class MonitorService {
     return monitorReturnDto;
   }
 
+  async findById(id: string) {
+    const monitor = await this.monitorRepository.findOne({
+      where: { id: id },
+      relations: ['usersId', 'classroomId', 'matterId'],
+    });
+    if (!monitor) {
+      throw new NotFoundException('No monitor found');
+    }
+
+    return monitor;
+  }
+
   async update(
     id: string,
     monitorDto: UpdateMonitorDto,

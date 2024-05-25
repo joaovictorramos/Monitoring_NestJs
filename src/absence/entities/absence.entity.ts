@@ -1,7 +1,10 @@
+import { MonitorEntity } from 'src/monitor/entities/monitor.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -30,4 +33,8 @@ export class AbsenceEntity {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @ManyToOne(() => MonitorEntity, (monitor) => monitor.absences)
+  @JoinColumn({ name: 'monitor_id' })
+  monitorId: MonitorEntity;
 }

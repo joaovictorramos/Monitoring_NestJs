@@ -1,3 +1,4 @@
+import { AbsenceEntity } from 'src/absence/entities/absence.entity';
 import { ClassroomEntity } from 'src/classroom/entities/classroom.entity';
 import { MatterEntity } from 'src/matter/entities/matter.entity';
 import { UsersEntity } from 'src/users/entities/user.entity';
@@ -7,6 +8,7 @@ import {
   Entity,
   JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -65,4 +67,7 @@ export class MonitorEntity {
   @ManyToOne(() => MatterEntity, (matter) => matter.monitors)
   @JoinColumn({ name: 'matter_id' })
   matterId: MatterEntity;
+
+  @OneToMany(() => AbsenceEntity, (absences) => absences.monitorId)
+  absences: AbsenceEntity[];
 }

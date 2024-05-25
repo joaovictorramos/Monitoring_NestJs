@@ -16,5 +16,6 @@ import { MatterModule } from 'src/matter/matter.module';
   ],
   controllers: [MonitorController],
   providers: [MonitorService],
+  exports: [MonitorService],
 })
 export class MonitorModule {}
