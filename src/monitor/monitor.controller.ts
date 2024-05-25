@@ -35,6 +35,7 @@ export class MonitorController {
   }
 
   @Patch(':id')
+  @UsePipes(new ValidateMonitorCredentialsPipe())
   update(@Param('id') id: string, @Body() monitorDto: UpdateMonitorDto) {
     return this.monitorService.update(id, monitorDto);
   }

@@ -1,3 +1,5 @@
+import { MatterReturnDto } from './../matter/dto/return-matter.dto';
+import { MatterService } from './../matter/matter.service';
 import { ClassroomReturnDto } from './../classroom/dto/return-classroom.dto';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { Injectable, NotFoundException, Logger } from '@nestjs/common';
@@ -23,6 +25,7 @@ export class MonitorService {
     private readonly monitorRepository: Repository<MonitorEntity>,
     private readonly classroomService: ClassroomService,
     private readonly usersService: UsersService,
+    private readonly matterService: MatterService,
   ) {}
   async create(monitorDto: CreateMonitorDto) {
     // Se já existe um monitor cadastrado
@@ -41,7 +44,15 @@ export class MonitorService {
     // Se há usuário
     const existingUsers = await this.usersService.findOne(monitorDto.usersId);
     if (!existingUsers) {
-      throw new NotFoundException('No Users found');
+      throw new NotFoundException('No users found');
+    }
+
+    // Se há matéria
+    const existingMatters = await this.matterService.findOne(
+      monitorDto.matterId,
+    );
+    if (!existingMatters) {
+      throw new NotFoundException('No matter found');
     }
 
     // Se há sala de aula
@@ -98,6 +109,7 @@ export class MonitorService {
     monitor.endHour = monitorDto.endHour;
     monitor.usersId = existingUsers;
     monitor.classroomId = existingClassroom;
+    monitor.matterId = existingMatters;
     return await this.monitorRepository.save(monitor);
   }
 
@@ -112,7 +124,7 @@ export class MonitorService {
   async findOne(id: string) {
     const monitor = await this.monitorRepository.findOne({
       where: { id: id },
-      relations: ['usersId', 'classroomId'],
+      relations: ['usersId', 'classroomId', 'matterId'],
     });
     if (!monitor) {
       throw new NotFoundException('No monitor found');
@@ -149,6 +161,19 @@ export class MonitorService {
         isReserved: monitor.classroomId.isReserved,
       };
       monitorReturnDto.classrooms = classroomReturnDto;
+    }
+    if (monitor.matterId) {
+      const matterReturnDto: MatterReturnDto = {
+        id: monitor.matterId.id,
+        name: monitor.matterId.name,
+        teacher: monitor.matterId.teacher,
+        type: monitor.matterId.type,
+        period: monitor.matterId.period,
+        startHour: monitor.matterId.startHour,
+        endHour: monitor.matterId.endHour,
+        daysOfTheWeek: monitor.matterId.daysOfTheWeek,
+      };
+      monitorReturnDto.matters = matterReturnDto;
     }
 
     return monitorReturnDto;

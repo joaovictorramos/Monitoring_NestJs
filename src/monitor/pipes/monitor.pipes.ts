@@ -13,6 +13,8 @@ export class ValidateMonitorCredentialsPipe implements PipeTransform {
       );
     } else if (!value.usersId) {
       throw new NotFoundException('No users found');
+    } else if (!value.matterId) {
+      throw new NotFoundException('No matter found');
     }
     return value;
   }

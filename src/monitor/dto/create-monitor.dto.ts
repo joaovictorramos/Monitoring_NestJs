@@ -9,4 +9,5 @@ export class CreateMonitorDto {
   readonly endHour: string;
   readonly usersId: string;
   readonly classroomId: string;
+  readonly matterId: string;
 }
