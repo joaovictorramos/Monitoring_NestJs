@@ -13,6 +13,9 @@ import { MatterModule } from './matter/matter.module';
 import { MatterEntity } from './matter/entities/matter.entity';
 import { AbsenceModule } from './absence/absence.module';
 import { AbsenceEntity } from './absence/entities/absence.entity';
+import { AuthModule } from './auth/auth.module';
+import { APP_GUARD } from '@nestjs/core';
+import { AuthGuard } from './auth/auth.guard';
 
 @Module({
   imports: [
@@ -39,8 +42,15 @@ import { AbsenceEntity } from './absence/entities/absence.entity';
     MonitorModule,
     MatterModule,
     AbsenceModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: AuthGuard,
+    },
+  ],
 })
 export class AppModule {}

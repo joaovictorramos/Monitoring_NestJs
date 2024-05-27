@@ -63,6 +63,16 @@ export class UsersService {
     return user;
   }
 
+  async findByLogin(login: string) {
+    const user = await this.usersRepository.findOne({
+      where: { login: login },
+    });
+    if (!user) {
+      throw new NotFoundException('No users found');
+    }
+    return user;
+  }
+
   async update(
     id: string,
     usersDto: Partial<UsersUpdateDto>,
