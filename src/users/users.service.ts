@@ -2,6 +2,7 @@
 import { Injectable } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
+import * as bcrypt from 'bcrypt';
 import { UsersUpdateDto } from './dto/update-users.dto';
 import { UsersCreateDto } from './dto/create-users.dto';
 import { UsersEntity } from './entities/user.entity';
@@ -21,12 +22,12 @@ export class UsersService {
 
   async create(usersDto: UsersCreateDto): Promise<UsersEntity> {
     const existingUser = await this.usersRepository.findOne({
-      where: { login: usersDto.login, password: usersDto.password },
+      where: { login: usersDto.login },
     });
 
     if (existingUser) {
       throw new AlreadyExistsException(
-        'User with the same login and password already exists',
+        'User with the same login already exists',
       );
     }
 
@@ -42,7 +43,7 @@ export class UsersService {
     user.id = id;
     user.name = usersDto.name;
     user.login = usersDto.login;
-    user.password = usersDto.password;
+    user.password = await this.hashPassword(usersDto.password);
     user.office = usersDto.office;
     return await this.usersRepository.save(user);
   }
@@ -97,5 +98,11 @@ export class UsersService {
     if (user.affected === 0) {
       throw new NotFoundException('No users found');
     }
+  }
+
+  private async hashPassword(password: string): Promise<string> {
+    const salt = 10;
+    const hash = await bcrypt.hash(password, salt);
+    return hash;
   }
 }

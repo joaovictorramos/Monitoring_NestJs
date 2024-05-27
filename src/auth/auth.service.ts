@@ -4,7 +4,12 @@ import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcrypt';
 import { AuthDto } from './dto/guard-auth.dto';
+import {
+  MissingCredentialsException,
+  UnauthorizedUserException,
+} from 'src/exceptions/entity.exceptions';
 
 @Injectable()
 export class AuthService {
@@ -14,18 +19,35 @@ export class AuthService {
   ) {}
 
   async signIn(authDto: AuthDto): Promise<any> {
-    if (authDto.login !== undefined) {
+    if (authDto.login !== undefined && authDto.password !== undefined) {
       const users = await this.usersService.findByLogin(authDto.login);
       if (!users) {
-        throw new UnauthorizedException();
+        throw new UnauthorizedUserException('Unauthorized user');
       }
+
+      const isPassword = await this.checkPassword(
+        authDto.password,
+        users.password,
+      );
+      if (!isPassword) {
+        throw new UnauthorizedUserException('Unauthorized user');
+      }
+
       const payload = { userLogin: users.login, userName: users.name };
       const token = {
         access_token: await this.jwtService.signAsync(payload),
       };
       return token;
     }
-    throw new UnauthorizedException();
+    throw new MissingCredentialsException('Login and password are required');
+  }
+
+  private async checkPassword(
+    password: string,
+    hash: string,
+  ): Promise<boolean> {
+    const match = await bcrypt.compare(password, hash);
+    return match;
   }
 
   create(createAuthDto: CreateAuthDto) {
