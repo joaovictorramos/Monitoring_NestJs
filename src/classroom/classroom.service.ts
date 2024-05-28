@@ -66,10 +66,12 @@ export class ClassroomService {
       throw new NotFoundException('No classroom found');
     }
 
-    if (!['SALA', 'LABORATÓRIO', 'AUDITÓRIO'].includes(classroomDto.type)) {
-      throw new InvalidRoleException(
-        'Invalid role value. Allowed value: "SALA", "LABORATÓRIO" or "AUDITÓRIO"',
-      );
+    if (classroomDto.type !== undefined) {
+      if (!['SALA', 'LABORATÓRIO', 'AUDITÓRIO'].includes(classroomDto.type)) {
+        throw new InvalidRoleException(
+          'Invalid role value. Allowed value: "SALA", "LABORATÓRIO" or "AUDITÓRIO"',
+        );
+      }
     }
     Object.assign(classroom, classroomDto);
     return await this.classroomRepository.save(classroom);

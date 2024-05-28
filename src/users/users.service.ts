@@ -83,10 +83,12 @@ export class UsersService {
       throw new NotFoundException('No users found');
     }
 
-    if (!['PROFESSOR', 'ALUNO'].includes(usersDto.office)) {
-      throw new InvalidRoleException(
-        'Invalid role value. Allowed value: "PROFESSOR" or "ALUNO"',
-      );
+    if (usersDto.office !== undefined) {
+      if (!['PROFESSOR', 'ALUNO'].includes(usersDto.office)) {
+        throw new InvalidRoleException(
+          'Invalid role value. Allowed value: "PROFESSOR" or "ALUNO"',
+        );
+      }
     }
 
     Object.assign(user, usersDto);
