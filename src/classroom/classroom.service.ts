@@ -6,6 +6,7 @@ import { CreateClassroomDto } from './dto/create-classroom.dto';
 import { UpdateClassroomDto } from './dto/update-classroom.dto';
 import { ClassroomEntity } from './entities/classroom.entity';
 import {
+  AlreadyExistsException,
   InvalidRoleException,
   MissingCredentialsException,
   NotFoundException,
@@ -20,6 +21,15 @@ export class ClassroomService {
   ) {}
 
   async create(classroomDto: CreateClassroomDto): Promise<ClassroomEntity> {
+    const existingClassroom = await this.classroomRepository.findOne({
+      where: { name: classroomDto.name },
+    });
+    if (existingClassroom) {
+      throw new AlreadyExistsException(
+        'Classroom with the same name already exists',
+      );
+    }
+
     if (!['SALA', 'LABORATÓRIO', 'AUDITÓRIO'].includes(classroomDto.type)) {
       throw new InvalidRoleException(
         'Invalid role value. Allowed value: "SALA", "LABORATÓRIO" or "AUDITÓRIO"',

@@ -21,7 +21,7 @@ export class ClassroomEntity {
   @Column()
   type: string;
 
-  @Column({ name: 'is_reserved' })
+  @Column({ name: 'is_reserved', default: () => 'FALSE' })
   isReserved: boolean;
 
   @CreateDateColumn({
