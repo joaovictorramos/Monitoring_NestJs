@@ -12,7 +12,7 @@ import { IS_PUBLIC_KEY, jwtConstants } from './constants/constants';
 export class AuthGuard implements CanActivate {
   constructor(
     private jwtService: JwtService,
-    private reflector: Reflector,
+    protected reflector: Reflector,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

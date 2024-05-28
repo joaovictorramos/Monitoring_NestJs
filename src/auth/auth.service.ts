@@ -33,7 +33,11 @@ export class AuthService {
         throw new UnauthorizedUserException('Unauthorized user');
       }
 
-      const payload = { userLogin: users.login, userName: users.name };
+      const payload = {
+        login: users.login,
+        name: users.name,
+        office: users.office,
+      };
       const token = {
         access_token: await this.jwtService.signAsync(payload),
       };
