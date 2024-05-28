@@ -9,6 +9,7 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   AlreadyExistsException,
   InvalidRoleException,
+  MissingCredentialsException,
 } from 'src/exceptions/entity.exceptions';
 
 @Injectable()
@@ -100,7 +101,7 @@ export class MatterService {
       (!matterDto.endHour && matterDto.endHour !== undefined) ||
       (!matterDto.daysOfTheWeek && matterDto.daysOfTheWeek !== undefined)
     ) {
-      throw new InvalidRoleException(
+      throw new MissingCredentialsException(
         'Invalid role value. Name, teacher, type, startHour, endHour and daysOfTheWeek cannot be null',
       );
     }

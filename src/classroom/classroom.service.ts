@@ -77,9 +77,13 @@ export class ClassroomService {
       throw new NotFoundException('No classroom found');
     }
 
-    if (!classroomDto.name || !classroomDto.isReserved) {
+    if (
+      (!classroomDto.name && classroomDto.name !== undefined) ||
+      (!classroomDto.type && classroomDto.type !== undefined) ||
+      (classroomDto.isReserved == null && classroomDto.isReserved !== undefined)
+    ) {
       throw new MissingCredentialsException(
-        'Name and isReserved cannot be null',
+        'Name, type and isReserved cannot be null',
       );
     }
 
