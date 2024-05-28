@@ -8,6 +8,7 @@ import {
   Delete,
   HttpCode,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { ClassroomService } from './classroom.service';
 import { CreateClassroomDto } from './dto/create-classroom.dto';
@@ -16,6 +17,7 @@ import { ClassroomEntity } from './entities/classroom.entity';
 import { RolesGuard } from 'src/auth/auth.roles';
 import { Roles } from 'src/decorators/role.decorator';
 import { Role } from 'src/enums/role.enum';
+import { ValidateClassroomCredentialsPipe } from './pipes/classroom.pipes';
 
 @Controller('classroom')
 @UseGuards(RolesGuard)
@@ -24,6 +26,7 @@ export class ClassroomController {
 
   @Post()
   @Roles(Role.PROFESSOR)
+  @UsePipes(new ValidateClassroomCredentialsPipe())
   create(@Body() classroomDto: CreateClassroomDto) {
     return this.classroomService.create(classroomDto);
   }

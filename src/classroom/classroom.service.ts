@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
 import { CreateClassroomDto } from './dto/create-classroom.dto';
@@ -7,6 +7,7 @@ import { UpdateClassroomDto } from './dto/update-classroom.dto';
 import { ClassroomEntity } from './entities/classroom.entity';
 import {
   InvalidRoleException,
+  MissingCredentialsException,
   NotFoundException,
 } from '../exceptions/entity.exceptions';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -64,6 +65,12 @@ export class ClassroomService {
 
     if (!classroom) {
       throw new NotFoundException('No classroom found');
+    }
+
+    if (!classroomDto.name || !classroomDto.isReserved) {
+      throw new MissingCredentialsException(
+        'Name and isReserved cannot be null',
+      );
     }
 
     if (classroomDto.type !== undefined) {
