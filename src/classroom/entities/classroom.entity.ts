@@ -12,16 +12,16 @@ export class ClassroomEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
   @Column()
   block: string;
 
-  @Column()
+  @Column({ nullable: false })
   type: string;
 
-  @Column({ name: 'is_reserved', default: () => 'FALSE' })
+  @Column({ name: 'is_reserved', nullable: false, default: () => 'FALSE' })
   isReserved: boolean;
 
   @CreateDateColumn({

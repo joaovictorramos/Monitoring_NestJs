@@ -13,25 +13,25 @@ export class MatterEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: false })
   name: string;
 
-  @Column()
+  @Column({ nullable: false })
   teacher: string;
 
-  @Column()
+  @Column({ nullable: false })
   type: string;
 
   @Column()
   period: number;
 
-  @Column({ name: 'start_hour', type: 'time' })
+  @Column({ name: 'start_hour', type: 'time', nullable: false })
   startHour: string;
 
-  @Column({ name: 'end_hour', type: 'time' })
+  @Column({ name: 'end_hour', type: 'time', nullable: false })
   endHour: string;
 
-  @Column({ name: 'days_of_the_week' })
+  @Column({ name: 'days_of_the_week', nullable: false })
   daysOfTheWeek: string;
 
   @CreateDateColumn({

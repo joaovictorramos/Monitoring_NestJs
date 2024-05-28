@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Injectable, Logger, NotFoundException } from '@nestjs/common';
 import { CreateMatterDto } from './dto/create-matter.dto';
 import { UpdateMatterDto } from './dto/update-matter.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -90,6 +90,19 @@ export class MatterService {
     const matter = await this.matterRepository.findOne({ where: { id: id } });
     if (!matter) {
       throw new NotFoundException('No matter found');
+    }
+
+    if (
+      (!matterDto.name && matterDto.name !== undefined) ||
+      (!matterDto.teacher && matterDto.teacher !== undefined) ||
+      (!matterDto.type && matterDto.type !== undefined) ||
+      (!matterDto.startHour && matterDto.startHour !== undefined) ||
+      (!matterDto.endHour && matterDto.endHour !== undefined) ||
+      (!matterDto.daysOfTheWeek && matterDto.daysOfTheWeek !== undefined)
+    ) {
+      throw new InvalidRoleException(
+        'Invalid role value. Name, teacher, type, startHour, endHour and daysOfTheWeek cannot be null',
+      );
     }
 
     if (matterDto.type !== undefined) {
