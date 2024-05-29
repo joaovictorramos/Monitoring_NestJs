@@ -26,9 +26,9 @@ export class ValidateMonitorCredentialsPipe implements PipeTransform {
       throw new MissingCredentialsException(
         'Registration, name, institutionalEmail, typeOfMonitoring, daysOfTheWeek, startHour and endHour are requireds',
       );
-    } else if (!value.usersId) {
+    } else if (!value.usersId || value.usersId === undefined) {
       throw new NotFoundException('No users found');
-    } else if (!value.matterId) {
+    } else if (!value.matterId || value.matterId === undefined) {
       throw new NotFoundException('No matter found');
     }
     return value;

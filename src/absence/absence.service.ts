@@ -8,6 +8,7 @@ import { v4 as uuidv4 } from 'uuid';
 import { Repository } from 'typeorm';
 import {
   InvalidRoleException,
+  MissingCredentialsException,
   NotFoundException,
 } from 'src/exceptions/entity.exceptions';
 import { AbsenceReturnDto } from './dto/return-absence.dto';
@@ -122,19 +123,11 @@ export class AbsenceService {
     if (!absence) {
       throw new NotFoundException('No absence found');
     }
-    if (absenceDto.date !== undefined) {
-      if (!absenceDto.date) {
-        throw new InvalidRoleException(
-          'Invalid role value. Date cannot be null',
-        );
-      }
-    }
-    if (absenceDto.monitorId !== undefined) {
-      if (!absenceDto.monitorId) {
-        throw new InvalidRoleException(
-          'Invalid role value. Monitor cannot be null',
-        );
-      }
+    if (
+      (!absenceDto.date && absenceDto.date !== undefined) ||
+      (!absenceDto.monitorId && absenceDto.monitorId !== undefined)
+    ) {
+      throw new MissingCredentialsException('Date or monitor cannot be null');
     }
 
     Object.assign(absence, absenceDto);

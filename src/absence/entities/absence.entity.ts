@@ -34,7 +34,9 @@ export class AbsenceEntity {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => MonitorEntity, (monitor) => monitor.absences)
+  @ManyToOne(() => MonitorEntity, (monitor) => monitor.absences, {
+    nullable: false,
+  })
   @JoinColumn({ name: 'monitor_id' })
   monitorId: MonitorEntity;
 }
