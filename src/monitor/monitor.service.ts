@@ -9,6 +9,7 @@ import { Not, Repository } from 'typeorm';
 import {
   InvalidRoleException,
   AlreadyExistsException,
+  MissingCredentialsException,
 } from '../exceptions/entity.exceptions';
 import { UsersService } from 'src/users/users.service';
 import { UsersReturnDto } from 'src/users/dto/return-users.dto';
@@ -250,6 +251,24 @@ export class MonitorService {
           'Invalid role value. Allowed value: "DOMINGO", "SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA" or "SÁBADO".',
         );
       }
+    }
+
+    if (
+      (!monitorDto.registration && monitorDto.registration !== undefined) ||
+      (!monitorDto.name && monitorDto.name !== undefined) ||
+      (!monitorDto.institutionalEmail &&
+        monitorDto.institutionalEmail !== undefined) ||
+      (!monitorDto.typeOfMonitoring &&
+        monitorDto.typeOfMonitoring !== undefined) ||
+      (!monitorDto.daysOfTheWeek && monitorDto.daysOfTheWeek !== undefined) ||
+      (!monitorDto.startHour && monitorDto.startHour !== undefined) ||
+      (!monitorDto.endHour && monitorDto.endHour !== undefined) ||
+      (!monitorDto.usersId && monitorDto.usersId !== undefined) ||
+      (!monitorDto.matterId && monitorDto.matterId !== undefined)
+    ) {
+      throw new MissingCredentialsException(
+        'Registration, name, institutionalEmail, typeOfMonitoring, daysOfTheWeek, startHour, endHour, usersId or matterId cannot be null',
+      );
     }
 
     Object.assign(monitor, monitorDto);

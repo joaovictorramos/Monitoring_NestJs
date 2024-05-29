@@ -30,16 +30,16 @@ export class MonitorEntity {
   @Column({ name: 'institutional_email', nullable: false })
   institutionalEmail: string;
 
-  @Column({ name: 'type_of_monitoring' })
+  @Column({ name: 'type_of_monitoring', nullable: false })
   typeOfMonitoring: string;
 
-  @Column({ name: 'days_of_the_week' })
+  @Column({ name: 'days_of_the_week', nullable: false })
   daysOfTheWeek: string;
 
-  @Column({ name: 'start_hour', type: 'time' })
+  @Column({ name: 'start_hour', type: 'time', nullable: false })
   startHour: string;
 
-  @Column({ name: 'end_hour', type: 'time' })
+  @Column({ name: 'end_hour', type: 'time', nullable: false })
   endHour: string;
 
   @CreateDateColumn({
@@ -56,7 +56,7 @@ export class MonitorEntity {
   })
   updatedAt: Date;
 
-  @ManyToOne(() => UsersEntity, (users) => users.monitors)
+  @ManyToOne(() => UsersEntity, (users) => users.monitors, { nullable: false })
   @JoinColumn({ name: 'users_id' })
   usersId: UsersEntity;
 
@@ -64,7 +64,9 @@ export class MonitorEntity {
   @JoinColumn({ name: 'classroom_id' })
   classroomId: ClassroomEntity;
 
-  @ManyToOne(() => MatterEntity, (matter) => matter.monitors)
+  @ManyToOne(() => MatterEntity, (matter) => matter.monitors, {
+    nullable: false,
+  })
   @JoinColumn({ name: 'matter_id' })
   matterId: MatterEntity;
 
