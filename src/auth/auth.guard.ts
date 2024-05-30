@@ -7,12 +7,14 @@ import {
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { IS_PUBLIC_KEY, jwtConstants } from './constants/constants';
+import { CachesService } from 'src/caches/caches.service';
 
 @Injectable()
 export class AuthGuard implements CanActivate {
   constructor(
-    private jwtService: JwtService,
-    protected reflector: Reflector,
+    private readonly jwtService: JwtService,
+    protected readonly reflector: Reflector,
+    protected readonly redisCache: CachesService,
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
@@ -26,11 +28,13 @@ export class AuthGuard implements CanActivate {
 
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
-    if (!token) {
+    const redisToken = await this.redisCache.retrieveData(token);
+
+    if (!token || !redisToken) {
       throw new UnauthorizedException();
     }
     try {
-      const payload = await this.jwtService.verifyAsync(token, {
+      const payload = await this.jwtService.verifyAsync(redisToken, {
         secret: jwtConstants.secret,
       });
 

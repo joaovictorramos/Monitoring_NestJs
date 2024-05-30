@@ -4,9 +4,14 @@ import { AbsenceController } from './absence.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AbsenceEntity } from './entities/absence.entity';
 import { MonitorModule } from 'src/monitor/monitor.module';
+import { CachesModule } from 'src/caches/caches.module';
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AbsenceEntity]), MonitorModule],
+  imports: [
+    TypeOrmModule.forFeature([AbsenceEntity]),
+    MonitorModule,
+    CachesModule,
+  ],
   controllers: [AbsenceController],
   providers: [AbsenceService],
 })

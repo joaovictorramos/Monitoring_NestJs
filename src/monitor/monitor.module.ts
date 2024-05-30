@@ -6,6 +6,7 @@ import { MonitorEntity } from './entities/monitor.entity';
 import { UsersModule } from 'src/users/users.module';
 import { ClassroomModule } from 'src/classroom/classroom.module';
 import { MatterModule } from 'src/matter/matter.module';
+import { CachesModule } from 'src/caches/caches.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { MatterModule } from 'src/matter/matter.module';
     UsersModule,
     ClassroomModule,
     MatterModule,
+    CachesModule,
   ],
   controllers: [MonitorController],
   providers: [MonitorService],

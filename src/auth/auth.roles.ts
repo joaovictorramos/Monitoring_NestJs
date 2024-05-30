@@ -3,11 +3,16 @@ import { ExecutionContext, Injectable, Logger } from '@nestjs/common';
 import { AuthGuard } from './auth.guard';
 import { JwtService } from '@nestjs/jwt';
 import { Reflector } from '@nestjs/core';
+import { CachesService } from 'src/caches/caches.service';
 
 @Injectable()
 export class RolesGuard extends AuthGuard {
-  constructor(jwtService: JwtService, reflector: Reflector) {
-    super(jwtService, reflector);
+  constructor(
+    jwtService: JwtService,
+    reflector: Reflector,
+    redisCache: CachesService,
+  ) {
+    super(jwtService, reflector, redisCache);
   }
 
   async canActivate(context: ExecutionContext): Promise<boolean> {

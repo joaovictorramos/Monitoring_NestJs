@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { UsersService } from './../users/users.service';
-import { Injectable, Logger, UnauthorizedException } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { CreateAuthDto } from './dto/create-auth.dto';
 import { UpdateAuthDto } from './dto/update-auth.dto';
 import { JwtService } from '@nestjs/jwt';
@@ -10,12 +10,14 @@ import {
   MissingCredentialsException,
   UnauthorizedUserException,
 } from 'src/exceptions/entity.exceptions';
+import { CachesService } from 'src/caches/caches.service';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private readonly usersService: UsersService,
-    private readonly jwtService: JwtService,
+    private usersService: UsersService,
+    private jwtService: JwtService,
+    private redisCache: CachesService,
   ) {}
 
   async signIn(authDto: AuthDto): Promise<any> {
@@ -41,6 +43,7 @@ export class AuthService {
       const token = {
         access_token: await this.jwtService.signAsync(payload),
       };
+      await this.redisCache.storeData(token.access_token);
       return token;
     }
     throw new MissingCredentialsException('Login and password are required');

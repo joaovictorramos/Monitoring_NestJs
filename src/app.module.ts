@@ -16,6 +16,7 @@ import { AbsenceEntity } from './absence/entities/absence.entity';
 import { AuthModule } from './auth/auth.module';
 import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
+import { CachesModule } from './caches/caches.module';
 
 @Module({
   imports: [
@@ -31,7 +32,6 @@ import { AuthGuard } from './auth/auth.guard';
         UsersEntity,
         ClassroomEntity,
         MonitorEntity,
-        ClassroomEntity,
         MatterEntity,
         AbsenceEntity,
       ],
@@ -43,6 +43,7 @@ import { AuthGuard } from './auth/auth.guard';
     MatterModule,
     AbsenceModule,
     AuthModule,
+    CachesModule,
   ],
   controllers: [AppController],
   providers: [
