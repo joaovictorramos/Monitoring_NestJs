@@ -8,12 +8,9 @@ export class ValidateClassroomCredentialsPipe implements PipeTransform {
       !value.name ||
       value.name === undefined ||
       !value.type ||
-      value.type === undefined ||
-      value.isReserved === undefined
+      value.type === undefined
     ) {
-      throw new MissingCredentialsException(
-        'Name, type and isReserved are requireds',
-      );
+      throw new MissingCredentialsException('Name and type are requireds');
     }
     return value;
   }
