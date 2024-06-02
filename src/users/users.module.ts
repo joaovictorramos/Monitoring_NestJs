@@ -11,7 +11,12 @@ import { CommandHandlers } from './commands';
 @Module({
   imports: [TypeOrmModule.forFeature([UsersEntity]), CachesModule, CqrsModule],
   controllers: [UsersController],
-  providers: [UsersService, ...QueryHandlers, ...CommandHandlers],
-  exports: [UsersService],
+  providers: [
+    UsersService,
+    UsersController,
+    ...QueryHandlers,
+    ...CommandHandlers,
+  ],
+  exports: [UsersService, UsersController],
 })
 export class UsersModule {}

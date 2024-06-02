@@ -7,6 +7,9 @@ import { UsersModule } from 'src/users/users.module';
 import { ClassroomModule } from 'src/classroom/classroom.module';
 import { MatterModule } from 'src/matter/matter.module';
 import { CachesModule } from 'src/caches/caches.module';
+import { CqrsModule } from '@nestjs/cqrs';
+import { QueryHandlers } from './queries';
+import { CommandHandlers } from './commands';
 
 @Module({
   imports: [
@@ -15,9 +18,10 @@ import { CachesModule } from 'src/caches/caches.module';
     ClassroomModule,
     MatterModule,
     CachesModule,
+    CqrsModule,
   ],
   controllers: [MonitorController],
-  providers: [MonitorService],
+  providers: [MonitorService, ...QueryHandlers, ...CommandHandlers],
   exports: [MonitorService],
 })
 export class MonitorModule {}

@@ -11,7 +11,12 @@ import { CommandHandlers } from './commands';
 @Module({
   imports: [TypeOrmModule.forFeature([MatterEntity]), CachesModule, CqrsModule],
   controllers: [MatterController],
-  providers: [MatterService, ...QueryHandlers, ...CommandHandlers],
-  exports: [MatterService],
+  providers: [
+    MatterService,
+    MatterController,
+    ...QueryHandlers,
+    ...CommandHandlers,
+  ],
+  exports: [MatterService, MatterController],
 })
 export class MatterModule {}

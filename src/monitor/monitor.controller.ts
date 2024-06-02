@@ -17,41 +17,59 @@ import { ValidateMonitorCredentialsPipe } from './pipes/monitor.pipes';
 import { RolesGuard } from 'src/auth/auth.roles';
 import { Roles } from 'src/decorators/role.decorator';
 import { Role } from 'src/enums/role.enum';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { plainToClass } from 'class-transformer';
+import { FindAllMonitorQuery } from './queries/findAll/findAllMonitor.query';
+import { FindOneMonitorQuery } from './queries/findOne/findOneMonitor.query';
+import { CreateMonitorCommand } from './commands/create/createMonitor.command';
+import { UpdateMonitorCommand } from './commands/update/updateMonitor.command';
+import { DeleteMonitorCommand } from './commands/delete/deleteMonitor.command';
 
 @Controller('monitor')
 @UseGuards(RolesGuard)
 export class MonitorController {
-  constructor(private readonly monitorService: MonitorService) {}
+  constructor(
+    private readonly monitorService: MonitorService,
+    private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus,
+  ) {}
 
   @Post()
   @Roles(Role.PROFESSOR)
   @UsePipes(new ValidateMonitorCredentialsPipe())
   create(@Body() monitorDto: CreateMonitorDto) {
-    return this.monitorService.create(monitorDto);
+    const command = plainToClass(CreateMonitorCommand, monitorDto);
+    return this.commandBus.execute(command);
   }
 
   @Get()
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findAll() {
-    return this.monitorService.findAll();
+    const query = plainToClass(FindAllMonitorQuery, {});
+    return this.queryBus.execute(query);
   }
 
   @Get(':id')
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findOne(@Param('id') id: string) {
-    return this.monitorService.findOne(id);
+    const query = plainToClass(FindOneMonitorQuery, { id: id });
+    return this.queryBus.execute(query);
   }
 
   @Patch(':id')
   @Roles(Role.PROFESSOR)
   update(@Param('id') id: string, @Body() monitorDto: UpdateMonitorDto) {
-    return this.monitorService.update(id, monitorDto);
+    const command = plainToClass(UpdateMonitorCommand, monitorDto);
+    command.idPath = id;
+    return this.commandBus.execute(command);
   }
 
   @Delete(':id')
   @Roles(Role.PROFESSOR)
   @HttpCode(204)
   remove(@Param('id') id: string) {
-    return this.monitorService.remove(id);
+    const command = plainToClass(DeleteMonitorCommand, { id: id });
+    command.idPath = id;
+    return this.commandBus.execute(command);
   }
 }

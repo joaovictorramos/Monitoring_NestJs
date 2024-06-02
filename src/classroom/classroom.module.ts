@@ -21,8 +21,13 @@ import { CommandHandlers } from './commands';
     CqrsModule,
   ],
   controllers: [ClassroomController],
-  providers: [ClassroomService, ...QueryHandlers, ...CommandHandlers],
-  exports: [ClassroomService],
+  providers: [
+    ClassroomService,
+    ClassroomController,
+    ...QueryHandlers,
+    ...CommandHandlers,
+  ],
+  exports: [ClassroomService, ClassroomController],
 })
 export class ClassroomModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
