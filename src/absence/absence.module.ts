@@ -7,6 +7,7 @@ import { MonitorModule } from 'src/monitor/monitor.module';
 import { CachesModule } from 'src/caches/caches.module';
 import { QueryHandlers } from './queries';
 import { CqrsModule } from '@nestjs/cqrs';
+import { CommandHandlers } from './commands';
 
 @Module({
   imports: [
@@ -16,6 +17,6 @@ import { CqrsModule } from '@nestjs/cqrs';
     CqrsModule,
   ],
   controllers: [AbsenceController],
-  providers: [AbsenceService, ...QueryHandlers],
+  providers: [AbsenceService, ...QueryHandlers, ...CommandHandlers],
 })
 export class AbsenceModule {}

@@ -21,7 +21,12 @@ import { CommandHandlers } from './commands';
     CqrsModule,
   ],
   controllers: [MonitorController],
-  providers: [MonitorService, ...QueryHandlers, ...CommandHandlers],
-  exports: [MonitorService],
+  providers: [
+    MonitorService,
+    MonitorController,
+    ...QueryHandlers,
+    ...CommandHandlers,
+  ],
+  exports: [MonitorService, MonitorController],
 })
 export class MonitorModule {}

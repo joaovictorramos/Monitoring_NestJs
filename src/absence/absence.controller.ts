@@ -17,9 +17,13 @@ import { ValidateAbsenceCredentialsPipe } from './pipes/absence.pipes';
 import { RolesGuard } from 'src/auth/auth.roles';
 import { Roles } from 'src/decorators/role.decorator';
 import { Role } from 'src/enums/role.enum';
-import { QueryBus } from '@nestjs/cqrs';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { plainToClass } from 'class-transformer';
 import { FindAllAbsenceQuery } from './queries/findAll/findAllAbsence.query';
+import { FindOneAbsenceQuery } from './queries/findOne/findOneAbsence.query';
+import { CreateAbsenceCommand } from './commands/create/createAbsence.command';
+import { UpdateAbsenceCommand } from './commands/update/updateAbsence.command';
+import { DeleteAbsenceCommand } from './commands/delete/deleteAbsence.command';
 
 @Controller('absence')
 @UseGuards(RolesGuard)
@@ -27,13 +31,15 @@ export class AbsenceController {
   constructor(
     private readonly absenceService: AbsenceService,
     private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus,
   ) {}
 
   @Post()
   @Roles(Role.PROFESSOR)
   @UsePipes(new ValidateAbsenceCredentialsPipe())
-  create(@Body() createAbsenceDto: CreateAbsenceDto) {
-    return this.absenceService.create(createAbsenceDto);
+  create(@Body() absenceDto: CreateAbsenceDto) {
+    const command = plainToClass(CreateAbsenceCommand, absenceDto);
+    return this.commandBus.execute(command);
   }
 
   @Get()
@@ -46,19 +52,24 @@ export class AbsenceController {
   @Get(':id')
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findOne(@Param('id') id: string) {
-    return this.absenceService.findOne(id);
+    const query = plainToClass(FindOneAbsenceQuery, { id: id });
+    return this.queryBus.execute(query);
   }
 
   @Patch(':id')
   @Roles(Role.PROFESSOR)
-  update(@Param('id') id: string, @Body() updateAbsenceDto: UpdateAbsenceDto) {
-    return this.absenceService.update(id, updateAbsenceDto);
+  update(@Param('id') id: string, @Body() absenceDto: UpdateAbsenceDto) {
+    const command = plainToClass(UpdateAbsenceCommand, absenceDto);
+    command.idPath = id;
+    return this.commandBus.execute(command);
   }
 
   @Delete(':id')
   @Roles(Role.PROFESSOR)
   @HttpCode(204)
   remove(@Param('id') id: string) {
-    return this.absenceService.remove(id);
+    const command = plainToClass(DeleteAbsenceCommand, { id: id });
+    command.idPath = id;
+    return this.commandBus.execute(command);
   }
 }

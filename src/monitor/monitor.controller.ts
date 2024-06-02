@@ -24,6 +24,7 @@ import { FindOneMonitorQuery } from './queries/findOne/findOneMonitor.query';
 import { CreateMonitorCommand } from './commands/create/createMonitor.command';
 import { UpdateMonitorCommand } from './commands/update/updateMonitor.command';
 import { DeleteMonitorCommand } from './commands/delete/deleteMonitor.command';
+import { FindByIdMonitorQuery } from './queries/findById/findByIdMonitor.query';
 
 @Controller('monitor')
 @UseGuards(RolesGuard)
@@ -53,6 +54,13 @@ export class MonitorController {
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findOne(@Param('id') id: string) {
     const query = plainToClass(FindOneMonitorQuery, { id: id });
+    return this.queryBus.execute(query);
+  }
+
+  @Get('id')
+  @Roles(Role.PROFESSOR, Role.ALUNO)
+  findById(@Param('id') id: string) {
+    const query = plainToClass(FindByIdMonitorQuery, { id: id });
     return this.queryBus.execute(query);
   }
 
