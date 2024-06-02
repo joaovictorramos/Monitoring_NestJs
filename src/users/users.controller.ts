@@ -72,8 +72,8 @@ export class UsersController {
   @Roles(Role.PROFESSOR)
   @HttpCode(204)
   remove(@Param('id') id: string) {
-    const command = plainToClass(DeleteUsersCommand, {});
+    const command = plainToClass(DeleteUsersCommand, { id: id });
     command.idPath = id;
-    return this.usersService.remove(id);
+    return this.commandBus.execute(command);
   }
 }

@@ -1,10 +1,13 @@
-import { ICommandHandler } from '@nestjs/cqrs';
+/* eslint-disable @typescript-eslint/no-unused-vars */
+import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { DeleteUsersCommand } from './deleteUsers.command';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { UsersEntity } from 'src/users/entities/user.entity';
 import { NotFoundException } from 'src/exceptions/entity.exceptions';
+import { Logger } from '@nestjs/common';
 
+@CommandHandler(DeleteUsersCommand)
 export class DeleteUsersHandler
   implements ICommandHandler<DeleteUsersCommand | null>
 {
