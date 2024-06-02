@@ -17,11 +17,17 @@ import { ValidateAbsenceCredentialsPipe } from './pipes/absence.pipes';
 import { RolesGuard } from 'src/auth/auth.roles';
 import { Roles } from 'src/decorators/role.decorator';
 import { Role } from 'src/enums/role.enum';
+import { QueryBus } from '@nestjs/cqrs';
+import { plainToClass } from 'class-transformer';
+import { FindAllAbsenceQuery } from './queries/findAll/findAllAbsence.query';
 
 @Controller('absence')
 @UseGuards(RolesGuard)
 export class AbsenceController {
-  constructor(private readonly absenceService: AbsenceService) {}
+  constructor(
+    private readonly absenceService: AbsenceService,
+    private readonly queryBus: QueryBus,
+  ) {}
 
   @Post()
   @Roles(Role.PROFESSOR)
@@ -33,7 +39,8 @@ export class AbsenceController {
   @Get()
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findAll() {
-    return this.absenceService.findAll();
+    const query = plainToClass(FindAllAbsenceQuery, {});
+    return this.queryBus.execute(query);
   }
 
   @Get(':id')

@@ -18,29 +18,43 @@ import { UsersUpdateDto } from './dto/update-users.dto';
 import { Roles } from 'src/decorators/role.decorator';
 import { RolesGuard } from 'src/auth/auth.roles';
 import { Role } from 'src/enums/role.enum';
+import { plainToClass } from 'class-transformer';
+import { FindAllUsersQuery } from './queries/findAll/findAllUsers.query';
+import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { FindOneUsersQuery } from './queries/findOne/findOneUsers.query';
+import { CreateUsersCommand } from './commands/create/createUsers.command';
+import { UpdateUsersCommand } from './commands/update/updateUsers.command';
+import { DeleteUsersCommand } from './commands/delete/deleteUsers.command';
 
 @Controller('users')
 @UseGuards(RolesGuard)
 export class UsersController {
-  constructor(private readonly usersService: UsersService) {}
+  constructor(
+    private readonly usersService: UsersService,
+    private readonly queryBus: QueryBus,
+    private readonly commandBus: CommandBus,
+  ) {}
 
   @Post()
   @Roles(Role.PROFESSOR)
   @UsePipes(new ValidateCredentialsPipe())
   create(@Body() usersDto: UsersCreateDto): Promise<UsersEntity> {
-    return this.usersService.create(usersDto);
+    const command = plainToClass(CreateUsersCommand, usersDto);
+    return this.commandBus.execute(command);
   }
 
   @Get()
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findAll() {
-    return this.usersService.findAll();
+    const query = plainToClass(FindAllUsersQuery, {});
+    return this.queryBus.execute(query);
   }
 
   @Get(':id')
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findOne(@Param('id') id: string) {
-    return this.usersService.findOne(id);
+    const query = plainToClass(FindOneUsersQuery, { id: id });
+    return this.queryBus.execute(query);
   }
 
   @Patch(':id')
@@ -49,13 +63,17 @@ export class UsersController {
     @Param('id') id: string,
     @Body() usersDto: Partial<UsersUpdateDto>,
   ): Promise<UsersEntity> {
-    return this.usersService.update(id, usersDto);
+    const command = plainToClass(UpdateUsersCommand, usersDto);
+    command.idPath = id;
+    return this.commandBus.execute(command);
   }
 
   @Delete(':id')
   @Roles(Role.PROFESSOR)
   @HttpCode(204)
   remove(@Param('id') id: string) {
+    const command = plainToClass(DeleteUsersCommand, {});
+    command.idPath = id;
     return this.usersService.remove(id);
   }
 }
