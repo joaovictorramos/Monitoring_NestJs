@@ -10,7 +10,9 @@ import {
 import { CachesService } from './caches.service';
 import { CreateCachesDto } from './dto/create-caches.dto';
 import { UpdateCachesDto } from './dto/update-caches.dto';
+import { ApiExcludeController } from '@nestjs/swagger';
 
+@ApiExcludeController()
 @Controller('caches')
 export class CachesController {
   constructor(private readonly cachesService: CachesService) {}

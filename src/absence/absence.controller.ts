@@ -24,7 +24,9 @@ import { FindOneAbsenceQuery } from './queries/findOne/findOneAbsence.query';
 import { CreateAbsenceCommand } from './commands/create/createAbsence.command';
 import { UpdateAbsenceCommand } from './commands/update/updateAbsence.command';
 import { DeleteAbsenceCommand } from './commands/delete/deleteAbsence.command';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('absence')
 @Controller('absence')
 @UseGuards(RolesGuard)
 export class AbsenceController {
@@ -34,6 +36,11 @@ export class AbsenceController {
     private readonly commandBus: CommandBus,
   ) {}
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Create absence',
+    description: 'Method responsible for creating absences',
+  })
   @Post()
   @Roles(Role.PROFESSOR)
   @UsePipes(new ValidateAbsenceCredentialsPipe())
@@ -42,6 +49,11 @@ export class AbsenceController {
     return this.commandBus.execute(command);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Search for absences',
+    description: 'Method responsible for searching for absences',
+  })
   @Get()
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findAll() {
@@ -49,6 +61,11 @@ export class AbsenceController {
     return this.queryBus.execute(query);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Search absences by id',
+    description: 'Method responsible for searching absences by id',
+  })
   @Get(':id')
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findOne(@Param('id') id: string) {
@@ -56,6 +73,11 @@ export class AbsenceController {
     return this.queryBus.execute(query);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update absence',
+    description: 'Method responsible for updating absences',
+  })
   @Patch(':id')
   @Roles(Role.PROFESSOR)
   update(@Param('id') id: string, @Body() absenceDto: UpdateAbsenceDto) {
@@ -64,6 +86,11 @@ export class AbsenceController {
     return this.commandBus.execute(command);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete absence',
+    description: 'Method responsible for deleting absences',
+  })
   @Delete(':id')
   @Roles(Role.PROFESSOR)
   @HttpCode(204)

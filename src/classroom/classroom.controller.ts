@@ -25,7 +25,9 @@ import { FindOneClassroomQuery } from './queries/findOne/findOneClassroom.query'
 import { CreateClassroomCommand } from './commands/create/createClassroom.command';
 import { UpdateClassroomCommand } from './commands/update/updateClassroom.command';
 import { DeleteClassroomCommand } from './commands/delete/DeleteClassroom.command';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('classroom')
 @Controller('classroom')
 @UseGuards(RolesGuard)
 export class ClassroomController {
@@ -35,6 +37,11 @@ export class ClassroomController {
     private readonly commandBus: CommandBus,
   ) {}
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Create classroom',
+    description: 'Method responsible for creating classrooms',
+  })
   @Post()
   @Roles(Role.PROFESSOR)
   @UsePipes(new ValidateClassroomCredentialsPipe())
@@ -43,6 +50,11 @@ export class ClassroomController {
     return this.commandBus.execute(command);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Search for clasrooms',
+    description: 'Method responsible for searching for classrooms',
+  })
   @Get()
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findAll() {
@@ -50,6 +62,11 @@ export class ClassroomController {
     return this.queryBus.execute(query);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Search classroom by id',
+    description: 'Method responsible for searching classroom by id',
+  })
   @Get(':id')
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findOne(@Param('id') id: string) {
@@ -57,6 +74,11 @@ export class ClassroomController {
     return this.queryBus.execute(query);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update classroom',
+    description: 'Method responsible for updating classrooms',
+  })
   @Patch(':id')
   @Roles(Role.PROFESSOR)
   update(
@@ -68,6 +90,11 @@ export class ClassroomController {
     return this.commandBus.execute(command);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete classroom',
+    description: 'Method responsible for deleting classrooms',
+  })
   @Delete(':id')
   @Roles(Role.PROFESSOR)
   @HttpCode(204)

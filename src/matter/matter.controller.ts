@@ -24,7 +24,9 @@ import { FindOneMatterQuery } from './queries/findOne/findOneMatter.query';
 import { CreateMatterCommand } from './commands/create/CreateMatter.command';
 import { UpdateMatterCommand } from './commands/update/updateMatter.command';
 import { DeleteMatterCommand } from './commands/delete/deleteMatter.command';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('matter')
 @Controller('matter')
 @UseGuards(RolesGuard)
 export class MatterController {
@@ -34,6 +36,11 @@ export class MatterController {
     private readonly commandBus: CommandBus,
   ) {}
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Create matter',
+    description: 'Method responsible for creating matters',
+  })
   @Post()
   @Roles(Role.PROFESSOR)
   @UsePipes(new ValidateMatterCredentialsPipe())
@@ -42,6 +49,11 @@ export class MatterController {
     return this.commandBus.execute(command);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Search for matters',
+    description: 'Method responsible for searching for matters',
+  })
   @Get()
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findAll() {
@@ -49,6 +61,11 @@ export class MatterController {
     return this.queryBus.execute(query);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Search matter by id',
+    description: 'Method responsible for searching matter by id',
+  })
   @Get(':id')
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findOne(@Param('id') id: string) {
@@ -56,6 +73,11 @@ export class MatterController {
     return this.queryBus.execute(query);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update matter',
+    description: 'Method responsible for updating matters',
+  })
   @Patch(':id')
   @Roles(Role.PROFESSOR)
   update(@Param('id') id: string, @Body() matterDto: UpdateMatterDto) {
@@ -64,6 +86,11 @@ export class MatterController {
     return this.commandBus.execute(command);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete matter',
+    description: 'Method responsible for deleting matters',
+  })
   @Delete(':id')
   @Roles(Role.PROFESSOR)
   @HttpCode(204)

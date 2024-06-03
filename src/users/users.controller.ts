@@ -25,7 +25,9 @@ import { FindOneUsersQuery } from './queries/findOne/findOneUsers.query';
 import { CreateUsersCommand } from './commands/create/createUsers.command';
 import { UpdateUsersCommand } from './commands/update/updateUsers.command';
 import { DeleteUsersCommand } from './commands/delete/deleteUsers.command';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('users')
 @Controller('users')
 @UseGuards(RolesGuard)
 export class UsersController {
@@ -35,6 +37,11 @@ export class UsersController {
     private readonly commandBus: CommandBus,
   ) {}
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Create user',
+    description: 'Method responsible for creating users',
+  })
   @Post()
   @Roles(Role.PROFESSOR)
   @UsePipes(new ValidateCredentialsPipe())
@@ -43,6 +50,11 @@ export class UsersController {
     return this.commandBus.execute(command);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Search for users',
+    description: 'Method responsible for searching for users',
+  })
   @Get()
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findAll() {
@@ -50,6 +62,11 @@ export class UsersController {
     return this.queryBus.execute(query);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Search user by id',
+    description: 'Method responsible for searching user by id',
+  })
   @Get(':id')
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findOne(@Param('id') id: string) {
@@ -57,6 +74,11 @@ export class UsersController {
     return this.queryBus.execute(query);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update user',
+    description: 'Method responsible for updating users',
+  })
   @Patch(':id')
   @Roles(Role.PROFESSOR)
   update(
@@ -68,6 +90,11 @@ export class UsersController {
     return this.commandBus.execute(command);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete user',
+    description: 'Method responsible for deleting users',
+  })
   @Delete(':id')
   @Roles(Role.PROFESSOR)
   @HttpCode(204)
