@@ -26,7 +26,12 @@ import { FindOneUsersQuery } from './queries/findOne/findOneUsers.query';
 import { CreateUsersCommand } from './commands/create/createUsers.command';
 import { UpdateUsersCommand } from './commands/update/updateUsers.command';
 import { DeleteUsersCommand } from './commands/delete/deleteUsers.command';
-import { ApiBearerAuth, ApiExcludeEndpoint, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiExcludeEndpoint,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UsersUpdatePasswordByLoginDto } from './dto/update-password';
 import { UpdatePasswordByLoginUsersCommand } from './commands/updatePasswordByEmail/updatePasswordByLoginUsers.command';
 import { FindByLoginUsersQuery } from './queries/findByLogin/findByLoginUsers.query';
