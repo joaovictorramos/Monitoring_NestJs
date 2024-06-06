@@ -17,6 +17,6 @@ import { CommandHandlers } from './commands';
     ...QueryHandlers,
     ...CommandHandlers,
   ],
-  exports: [UsersService, UsersController],
+  exports: [UsersService, UsersController, ...QueryHandlers],
 })
 export class UsersModule {}

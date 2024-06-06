@@ -102,7 +102,7 @@ export class UsersService {
     }
   }
 
-  private async hashPassword(password: string): Promise<string> {
+  public async hashPassword(password: string): Promise<string> {
     const salt = 10;
     const hash = await bcrypt.hash(password, salt);
     return hash;
