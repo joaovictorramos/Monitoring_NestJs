@@ -26,6 +26,10 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
+    if (context.switchToHttp().getRequest().path == '/users/recoverPassword') {
+      return true;
+    }
+
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
     const redisToken = await this.redisCache.retrieveData(token);

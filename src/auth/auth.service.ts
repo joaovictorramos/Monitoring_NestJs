@@ -11,18 +11,23 @@ import {
   UnauthorizedUserException,
 } from 'src/exceptions/entity.exceptions';
 import { CachesService } from 'src/caches/caches.service';
+import { FindByLoginUsersHandler } from 'src/users/queries/findByLogin/findByLoginUsers.handler';
 
 @Injectable()
 export class AuthService {
   constructor(
-    private usersService: UsersService,
+    private findByLoginHandler: FindByLoginUsersHandler,
     private jwtService: JwtService,
     private redisCache: CachesService,
   ) {}
 
   async signIn(authDto: AuthDto): Promise<any> {
     if (authDto.login !== undefined && authDto.password !== undefined) {
-      const users = await this.usersService.findByLogin(authDto.login);
+      const usersDto = {
+        login: authDto.login,
+      };
+
+      const users = await this.findByLoginHandler.execute(usersDto);
       if (!users) {
         throw new UnauthorizedUserException('Unauthorized user');
       }
