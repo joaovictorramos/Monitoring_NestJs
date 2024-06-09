@@ -26,7 +26,10 @@ export class AuthGuard implements CanActivate {
       return true;
     }
 
-    if (context.switchToHttp().getRequest().path == '/users/recoverPassword') {
+    if (
+      context.switchToHttp().getRequest().path == '/users/recoverPassword' ||
+      context.switchToHttp().getRequest().path == '/users/create'
+    ) {
       return true;
     }
 
