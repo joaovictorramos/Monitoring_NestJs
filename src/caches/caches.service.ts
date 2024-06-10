@@ -17,7 +17,7 @@ export class CachesService {
   }
 
   async storeData(bearer: string): Promise<void> {
-    await this.cacheManager.set(bearer, { access_token: bearer }, 200000);
+    await this.cacheManager.set(bearer, { access_token: bearer }, 6000000);
   }
 
   create(cacheDto: CreateCachesDto) {
