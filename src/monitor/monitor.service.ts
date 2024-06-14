@@ -142,7 +142,7 @@ export class MonitorService {
           password: monitor.usersId.password,
           office: monitor.usersId.office,
         };
-        monitorReturnDto.users = usersReturnDto;
+        monitorReturnDto.usersId = usersReturnDto;
       }
 
       if (monitor.classroomId) {
@@ -153,7 +153,7 @@ export class MonitorService {
           type: monitor.classroomId.type,
           isReserved: monitor.classroomId.isReserved,
         };
-        monitorReturnDto.classrooms = classroomReturnDto;
+        monitorReturnDto.classroomId = classroomReturnDto;
       }
 
       if (monitor.matterId) {
@@ -167,7 +167,7 @@ export class MonitorService {
           endHour: monitor.matterId.endHour,
           daysOfTheWeek: monitor.matterId.daysOfTheWeek,
         };
-        monitorReturnDto.matters = matterReturnDto;
+        monitorReturnDto.matterId = matterReturnDto;
       }
 
       return monitorReturnDto;
@@ -203,7 +203,7 @@ export class MonitorService {
         password: monitor.usersId.password,
         office: monitor.usersId.office,
       };
-      monitorReturnDto.users = usersReturnDto;
+      monitorReturnDto.usersId = usersReturnDto;
     }
     if (monitor.classroomId) {
       const classroomReturnDto: ClassroomReturnDto = {
@@ -213,7 +213,7 @@ export class MonitorService {
         type: monitor.classroomId.type,
         isReserved: monitor.classroomId.isReserved,
       };
-      monitorReturnDto.classrooms = classroomReturnDto;
+      monitorReturnDto.classroomId = classroomReturnDto;
     }
     if (monitor.matterId) {
       const matterReturnDto: MatterReturnDto = {
@@ -226,7 +226,7 @@ export class MonitorService {
         endHour: monitor.matterId.endHour,
         daysOfTheWeek: monitor.matterId.daysOfTheWeek,
       };
-      monitorReturnDto.matters = matterReturnDto;
+      monitorReturnDto.matterId = matterReturnDto;
     }
 
     return monitorReturnDto;

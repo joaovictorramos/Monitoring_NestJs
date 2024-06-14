@@ -37,28 +37,28 @@ export class AbsenceService {
     }
 
     const users = new UsersEntity();
-    users.id = existingMonitor.users.id;
-    users.name = existingMonitor.users.name;
-    users.login = existingMonitor.users.login;
-    users.password = existingMonitor.users.password;
-    users.office = existingMonitor.users.office;
+    users.id = existingMonitor.usersId.id;
+    users.name = existingMonitor.usersId.name;
+    users.login = existingMonitor.usersId.login;
+    users.password = existingMonitor.usersId.password;
+    users.office = existingMonitor.usersId.office;
 
     const matter = new MatterEntity();
-    matter.id = existingMonitor.matters.id;
-    matter.name = existingMonitor.matters.name;
-    matter.teacher = existingMonitor.matters.teacher;
-    matter.type = existingMonitor.matters.type;
-    matter.period = existingMonitor.matters.period;
-    matter.startHour = existingMonitor.matters.startHour;
-    matter.endHour = existingMonitor.matters.endHour;
-    matter.daysOfTheWeek = existingMonitor.matters.daysOfTheWeek;
+    matter.id = existingMonitor.matterId.id;
+    matter.name = existingMonitor.matterId.name;
+    matter.teacher = existingMonitor.matterId.teacher;
+    matter.type = existingMonitor.matterId.type;
+    matter.period = existingMonitor.matterId.period;
+    matter.startHour = existingMonitor.matterId.startHour;
+    matter.endHour = existingMonitor.matterId.endHour;
+    matter.daysOfTheWeek = existingMonitor.matterId.daysOfTheWeek;
 
     const classroom = new ClassroomEntity();
-    classroom.id = existingMonitor.classrooms.id;
-    classroom.name = existingMonitor.classrooms.name;
-    classroom.block = existingMonitor.classrooms.block;
-    classroom.type = existingMonitor.classrooms.type;
-    classroom.isReserved = existingMonitor.classrooms.isReserved;
+    classroom.id = existingMonitor.classroomId.id;
+    classroom.name = existingMonitor.classroomId.name;
+    classroom.block = existingMonitor.classroomId.block;
+    classroom.type = existingMonitor.classroomId.type;
+    classroom.isReserved = existingMonitor.classroomId.isReserved;
 
     const monitor = new MonitorEntity();
     monitor.id = existingMonitor.id;

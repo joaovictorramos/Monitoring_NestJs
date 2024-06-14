@@ -12,7 +12,7 @@ export class MonitorReturnDto {
   daysOfTheWeek: string;
   startHour: string;
   endHour: string;
-  users?: UsersReturnDto;
-  classrooms?: ClassroomReturnDto;
-  matters?: MatterReturnDto;
+  usersId?: UsersReturnDto;
+  classroomId?: ClassroomReturnDto;
+  matterId?: MatterReturnDto;
 }

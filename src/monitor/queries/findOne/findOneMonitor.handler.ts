@@ -47,7 +47,7 @@ export class FindOneMonitorHandler
         password: monitor.usersId.password,
         office: monitor.usersId.office,
       };
-      monitorReturnDto.users = usersReturnDto;
+      monitorReturnDto.usersId = usersReturnDto;
     }
     if (monitor.classroomId) {
       const classroomReturnDto: ClassroomReturnDto = {
@@ -57,7 +57,7 @@ export class FindOneMonitorHandler
         type: monitor.classroomId.type,
         isReserved: monitor.classroomId.isReserved,
       };
-      monitorReturnDto.classrooms = classroomReturnDto;
+      monitorReturnDto.classroomId = classroomReturnDto;
     }
     if (monitor.matterId) {
       const matterReturnDto: MatterReturnDto = {
@@ -70,7 +70,7 @@ export class FindOneMonitorHandler
         endHour: monitor.matterId.endHour,
         daysOfTheWeek: monitor.matterId.daysOfTheWeek,
       };
-      monitorReturnDto.matters = matterReturnDto;
+      monitorReturnDto.matterId = matterReturnDto;
     }
 
     return monitorReturnDto;

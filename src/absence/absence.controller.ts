@@ -24,6 +24,7 @@ import { FindOneAbsenceQuery } from './queries/findOne/findOneAbsence.query';
 import { CreateAbsenceCommand } from './commands/create/createAbsence.command';
 import { UpdateAbsenceCommand } from './commands/update/updateAbsence.command';
 import { DeleteAbsenceCommand } from './commands/delete/deleteAbsence.command';
+import { FindByMonitorAbsenceQuery } from './queries/findByMonitor/findByMonitorAbsence.query';
 
 @Controller('absence')
 @UseGuards(RolesGuard)
@@ -53,6 +54,13 @@ export class AbsenceController {
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findOne(@Param('id') id: string) {
     const query = plainToClass(FindOneAbsenceQuery, { id: id });
+    return this.queryBus.execute(query);
+  }
+
+  @Get('/monitor/:monitorId')
+  @Roles(Role.PROFESSOR)
+  findByMonitor(@Param('monitorId') id: string) {
+    const query = plainToClass(FindByMonitorAbsenceQuery, { id: id });
     return this.queryBus.execute(query);
   }
 

@@ -47,7 +47,7 @@ export class FindAllMonitorHandler
           password: monitor.usersId.password,
           office: monitor.usersId.office,
         };
-        monitorReturnDto.users = usersReturnDto;
+        monitorReturnDto.usersId = usersReturnDto;
       }
 
       if (monitor.classroomId) {
@@ -58,7 +58,7 @@ export class FindAllMonitorHandler
           type: monitor.classroomId.type,
           isReserved: monitor.classroomId.isReserved,
         };
-        monitorReturnDto.classrooms = classroomReturnDto;
+        monitorReturnDto.classroomId = classroomReturnDto;
       }
 
       if (monitor.matterId) {
@@ -72,7 +72,7 @@ export class FindAllMonitorHandler
           endHour: monitor.matterId.endHour,
           daysOfTheWeek: monitor.matterId.daysOfTheWeek,
         };
-        monitorReturnDto.matters = matterReturnDto;
+        monitorReturnDto.matterId = matterReturnDto;
       }
 
       return monitorReturnDto;
