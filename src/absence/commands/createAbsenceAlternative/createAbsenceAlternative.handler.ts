@@ -1,5 +1,4 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { CreateAbsenceCommand } from './createAbsence.command';
 import { AbsenceEntity } from 'src/absence/entities/absence.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -10,10 +9,11 @@ import { MatterEntity } from 'src/matter/entities/matter.entity';
 import { ClassroomEntity } from 'src/classroom/entities/classroom.entity';
 import { MonitorEntity } from 'src/monitor/entities/monitor.entity';
 import { MonitorController } from 'src/monitor/monitor.controller';
+import { CreateAbsenceAlternativeCommand } from './CreateAbsenceAlternative.command';
 
-@CommandHandler(CreateAbsenceCommand)
-export class CreateAbsenceHandler
-  implements ICommandHandler<CreateAbsenceCommand, AbsenceEntity>
+@CommandHandler(CreateAbsenceAlternativeCommand)
+export class CreateAbsenceAlternativeHandler
+  implements ICommandHandler<CreateAbsenceAlternativeCommand, AbsenceEntity>
 {
   constructor(
     @InjectRepository(AbsenceEntity)
@@ -21,7 +21,9 @@ export class CreateAbsenceHandler
     private readonly monitorController: MonitorController,
   ) {}
 
-  async execute(command: CreateAbsenceCommand): Promise<AbsenceEntity> {
+  async execute(
+    command: CreateAbsenceAlternativeCommand,
+  ): Promise<AbsenceEntity> {
     const existingMonitor = await this.monitorController.findOne(
       command.monitorId,
     );

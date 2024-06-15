@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Controller,
   Get,
@@ -9,6 +10,7 @@ import {
   UsePipes,
   HttpCode,
   UseGuards,
+  Logger,
 } from '@nestjs/common';
 import { AbsenceService } from './absence.service';
 import { CreateAbsenceDto } from './dto/create-absence.dto';
@@ -25,6 +27,8 @@ import { CreateAbsenceCommand } from './commands/create/createAbsence.command';
 import { UpdateAbsenceCommand } from './commands/update/updateAbsence.command';
 import { DeleteAbsenceCommand } from './commands/delete/deleteAbsence.command';
 import { FindByMonitorAbsenceQuery } from './queries/findByMonitor/findByMonitorAbsence.query';
+import { CreateAbsenceAlternativeDto } from './dto/create-absence-alternative.dto';
+import { CreateAbsenceAlternativeCommand } from './commands/createAbsenceAlternative/CreateAbsenceAlternative.command';
 
 @Controller('absence')
 @UseGuards(RolesGuard)
@@ -40,6 +44,14 @@ export class AbsenceController {
   @UsePipes(new ValidateAbsenceCredentialsPipe())
   create(@Body() absenceDto: CreateAbsenceDto) {
     const command = plainToClass(CreateAbsenceCommand, absenceDto);
+    return this.commandBus.execute(command);
+  }
+
+  @Post('createToMonitor')
+  @Roles(Role.PROFESSOR)
+  @UsePipes(new ValidateAbsenceCredentialsPipe())
+  createAbsence(@Body() absenceDto: CreateAbsenceAlternativeDto) {
+    const command = plainToClass(CreateAbsenceAlternativeCommand, absenceDto);
     return this.commandBus.execute(command);
   }
 
