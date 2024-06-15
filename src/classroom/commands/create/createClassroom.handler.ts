@@ -41,7 +41,6 @@ export class CreateClassroomHandler
     classroom.name = command.name;
     classroom.block = command.block;
     classroom.type = command.type;
-    classroom.isReserved = command.isReserved;
     return await this.classroomRepository.save(classroom);
   }
 }

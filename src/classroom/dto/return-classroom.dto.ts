@@ -3,5 +3,4 @@ export class ClassroomReturnDto {
   name: string;
   block: string;
   type: string;
-  isReserved: boolean;
 }

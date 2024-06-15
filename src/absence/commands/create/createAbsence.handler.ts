@@ -54,7 +54,6 @@ export class CreateAbsenceHandler
     classroom.name = existingMonitor.classroomId.name;
     classroom.block = existingMonitor.classroomId.block;
     classroom.type = existingMonitor.classroomId.type;
-    classroom.isReserved = existingMonitor.classroomId.isReserved;
 
     const monitor = new MonitorEntity();
     monitor.id = existingMonitor.id;

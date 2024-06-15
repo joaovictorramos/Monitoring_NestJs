@@ -1,4 +1,4 @@
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { IsOptional, IsString } from 'class-validator';
 
 export class UpdateClassroomCommand {
   @IsString()
@@ -15,8 +15,4 @@ export class UpdateClassroomCommand {
   @IsOptional()
   @IsString()
   readonly type?: string;
-
-  @IsOptional()
-  @IsBoolean()
-  readonly isReserved?: string;
 }

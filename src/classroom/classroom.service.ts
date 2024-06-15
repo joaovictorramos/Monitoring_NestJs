@@ -43,7 +43,6 @@ export class ClassroomService {
     classroom.name = classroomDto.name;
     classroom.block = classroomDto.block;
     classroom.type = classroomDto.type;
-    classroom.isReserved = classroomDto.isReserved;
     return await this.classroomRepository.save(classroom);
   }
 
@@ -79,8 +78,7 @@ export class ClassroomService {
 
     if (
       (!classroomDto.name && classroomDto.name !== undefined) ||
-      (!classroomDto.type && classroomDto.type !== undefined) ||
-      (classroomDto.isReserved == null && classroomDto.isReserved !== undefined)
+      (!classroomDto.type && classroomDto.type !== undefined)
     ) {
       throw new MissingCredentialsException(
         'Name, type and isReserved cannot be null',

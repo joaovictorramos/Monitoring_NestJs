@@ -21,9 +21,6 @@ export class ClassroomEntity {
   @Column({ nullable: false })
   type: string;
 
-  @Column({ name: 'is_reserved', nullable: false, default: () => 'FALSE' })
-  isReserved: boolean;
-
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',

@@ -56,7 +56,6 @@ export class FindAllMonitorHandler
           name: monitor.classroomId.name,
           block: monitor.classroomId.block,
           type: monitor.classroomId.type,
-          isReserved: monitor.classroomId.isReserved,
         };
         monitorReturnDto.classroomId = classroomReturnDto;
       }

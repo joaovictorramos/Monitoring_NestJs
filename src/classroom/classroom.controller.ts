@@ -25,7 +25,6 @@ import { FindOneClassroomQuery } from './queries/findOne/findOneClassroom.query'
 import { CreateClassroomCommand } from './commands/create/createClassroom.command';
 import { UpdateClassroomCommand } from './commands/update/updateClassroom.command';
 import { DeleteClassroomCommand } from './commands/delete/DeleteClassroom.command';
-import { FindOnlyTrueStatusClassroomQuery } from './queries/findOnlyTrueStatus/findOnlyTrueStatusClassroom.query';
 
 @Controller('classroom')
 @UseGuards(RolesGuard)
@@ -48,13 +47,6 @@ export class ClassroomController {
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findAll() {
     const query = plainToClass(FindAllClassroomQuery, {});
-    return this.queryBus.execute(query);
-  }
-
-  @Get('reserved')
-  @Roles(Role.PROFESSOR, Role.ALUNO)
-  findAllOnlyTrueStatus() {
-    const query = plainToClass(FindOnlyTrueStatusClassroomQuery, {});
     return this.queryBus.execute(query);
   }
 
