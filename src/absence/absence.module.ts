@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { AbsenceService } from './absence.service';
 import { AbsenceController } from './absence.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AbsenceEntity } from './entities/absence.entity';
@@ -17,6 +16,6 @@ import { CommandHandlers } from './commands';
     CqrsModule,
   ],
   controllers: [AbsenceController],
-  providers: [AbsenceService, ...QueryHandlers, ...CommandHandlers],
+  providers: [...QueryHandlers, ...CommandHandlers],
 })
 export class AbsenceModule {}

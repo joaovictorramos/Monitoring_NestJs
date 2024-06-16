@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-import { MonitorService } from './monitor.service';
 import { MonitorController } from './monitor.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MonitorEntity } from './entities/monitor.entity';
@@ -21,12 +20,7 @@ import { CommandHandlers } from './commands';
     CqrsModule,
   ],
   controllers: [MonitorController],
-  providers: [
-    MonitorService,
-    MonitorController,
-    ...QueryHandlers,
-    ...CommandHandlers,
-  ],
-  exports: [MonitorService, MonitorController],
+  providers: [MonitorController, ...QueryHandlers, ...CommandHandlers],
+  exports: [MonitorController],
 })
 export class MonitorModule {}

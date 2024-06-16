@@ -8,6 +8,7 @@ import {
   MissingCredentialsException,
   NotFoundException,
 } from 'src/exceptions/entity.exceptions';
+import { DaysOfTheWeekController } from 'src/days-of-the-week/days-of-the-week.controller';
 
 @CommandHandler(UpdateMatterCommand)
 export class UpdateMatterHandler
@@ -16,6 +17,7 @@ export class UpdateMatterHandler
   constructor(
     @InjectRepository(MatterEntity)
     private readonly matterRepository: Repository<MatterEntity>,
+    private readonly daysOfTheWeekController: DaysOfTheWeekController,
   ) {}
 
   async execute(command: Partial<UpdateMatterCommand>): Promise<MatterEntity> {
@@ -26,13 +28,20 @@ export class UpdateMatterHandler
       throw new NotFoundException('No matter found');
     }
 
+    const existingDaysOfTheWeek = await this.daysOfTheWeekController.findOne(
+      command.daysOfTheWeekId,
+    );
+    if (!existingDaysOfTheWeek) {
+      throw new NotFoundException('No days of the week found');
+    }
+
     if (
       (!command.name && command.name !== undefined) ||
       (!command.teacher && command.teacher !== undefined) ||
       (!command.type && command.type !== undefined) ||
       (!command.startHour && command.startHour !== undefined) ||
       (!command.endHour && command.endHour !== undefined) ||
-      (!command.daysOfTheWeek && command.daysOfTheWeek !== undefined)
+      (!command.daysOfTheWeekId && command.daysOfTheWeekId !== undefined)
     ) {
       throw new MissingCredentialsException(
         'Invalid role value. Name, teacher, type, startHour, endHour and daysOfTheWeek cannot be null',
@@ -44,23 +53,6 @@ export class UpdateMatterHandler
       if (!typeList.includes(command.type)) {
         throw new InvalidRoleException(
           'Invalid role value. Allowed value: "OBRIGATÓRIA" or "OPTATIVA"',
-        );
-      }
-    }
-
-    if (command.daysOfTheWeek !== undefined) {
-      const daysOfTheWeekList = [
-        'DOMINGO',
-        'SEGUNDA-FEIRA',
-        'TERÇA-FEIRA',
-        'QUARTA-FEIRA',
-        'QUINTA-FEIRA',
-        'SEXTA-FEIRA',
-        'SÁBADO',
-      ];
-      if (!daysOfTheWeekList.includes(command.daysOfTheWeek)) {
-        throw new InvalidRoleException(
-          'Invalid role value. Allowed value: "DOMINGO", "SEGUNDA=FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA" or "SÁBADO".',
         );
       }
     }

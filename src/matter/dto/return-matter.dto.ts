@@ -1,3 +1,5 @@
+import { DaysOfTheWeekReturnDto } from 'src/days-of-the-week/dto/return-days-of-the-week.dto';
+
 export class MatterReturnDto {
   id: string;
   name: string;
@@ -6,5 +8,5 @@ export class MatterReturnDto {
   period: number;
   startHour: string;
   endHour: string;
-  daysOfTheWeek: string;
+  daysOfTheWeekId?: DaysOfTheWeekReturnDto;
 }

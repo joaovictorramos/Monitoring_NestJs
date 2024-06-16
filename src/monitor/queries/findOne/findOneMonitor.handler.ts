@@ -8,6 +8,7 @@ import { MonitorReturnDto } from 'src/monitor/dto/return-monitor.dto';
 import { UsersReturnDto } from 'src/users/dto/return-users.dto';
 import { ClassroomReturnDto } from 'src/classroom/dto/return-classroom.dto';
 import { MatterReturnDto } from 'src/matter/dto/return-matter.dto';
+import { DaysOfTheWeekReturnDto } from 'src/days-of-the-week/dto/return-days-of-the-week.dto';
 
 @QueryHandler(FindOneMonitorQuery)
 export class FindOneMonitorHandler
@@ -59,6 +60,11 @@ export class FindOneMonitorHandler
       monitorReturnDto.classroomId = classroomReturnDto;
     }
     if (monitor.matterId) {
+      const daysOfTheWeekReturnDto: DaysOfTheWeekReturnDto = {
+        id: monitor.matterId.daysOfTheWeekId.id,
+        daysWeek: monitor.matterId.daysOfTheWeekId.daysWeek,
+      };
+
       const matterReturnDto: MatterReturnDto = {
         id: monitor.matterId.id,
         name: monitor.matterId.name,
@@ -67,7 +73,7 @@ export class FindOneMonitorHandler
         period: monitor.matterId.period,
         startHour: monitor.matterId.startHour,
         endHour: monitor.matterId.endHour,
-        daysOfTheWeek: monitor.matterId.daysOfTheWeek,
+        daysOfTheWeekId: daysOfTheWeekReturnDto,
       };
       monitorReturnDto.matterId = matterReturnDto;
     }

@@ -47,7 +47,7 @@ export class CreateAbsenceHandler
     matter.period = existingMonitor.matterId.period;
     matter.startHour = existingMonitor.matterId.startHour;
     matter.endHour = existingMonitor.matterId.endHour;
-    matter.daysOfTheWeek = existingMonitor.matterId.daysOfTheWeek;
+    matter.daysOfTheWeekId = existingMonitor.matterId.daysOfTheWeekId;
 
     const classroom = new ClassroomEntity();
     classroom.id = existingMonitor.classroomId.id;

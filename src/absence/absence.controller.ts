@@ -12,7 +12,6 @@ import {
   UseGuards,
   Logger,
 } from '@nestjs/common';
-import { AbsenceService } from './absence.service';
 import { CreateAbsenceDto } from './dto/create-absence.dto';
 import { UpdateAbsenceDto } from './dto/update-absence.dto';
 import { ValidateAbsenceCredentialsPipe } from './pipes/absence.pipes';
@@ -34,7 +33,6 @@ import { CreateAbsenceAlternativeCommand } from './commands/createAbsenceAlterna
 @UseGuards(RolesGuard)
 export class AbsenceController {
   constructor(
-    private readonly absenceService: AbsenceService,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
   ) {}

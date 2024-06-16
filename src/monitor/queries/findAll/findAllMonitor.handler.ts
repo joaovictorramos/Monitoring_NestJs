@@ -1,3 +1,4 @@
+import { DaysOfTheWeekReturnDto } from './../../../days-of-the-week/dto/return-days-of-the-week.dto';
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { FindAllMonitorQuery } from './findAllMonitor.query';
@@ -61,6 +62,11 @@ export class FindAllMonitorHandler
       }
 
       if (monitor.matterId) {
+        const daysOfTheWeekReturnDto: DaysOfTheWeekReturnDto = {
+          id: monitor.matterId.daysOfTheWeekId.id,
+          daysWeek: monitor.matterId.daysOfTheWeekId.daysWeek,
+        };
+
         const matterReturnDto: MatterReturnDto = {
           id: monitor.matterId.id,
           name: monitor.matterId.name,
@@ -69,7 +75,7 @@ export class FindAllMonitorHandler
           period: monitor.matterId.period,
           startHour: monitor.matterId.startHour,
           endHour: monitor.matterId.endHour,
-          daysOfTheWeek: monitor.matterId.daysOfTheWeek,
+          daysOfTheWeekId: daysOfTheWeekReturnDto,
         };
         monitorReturnDto.matterId = matterReturnDto;
       }

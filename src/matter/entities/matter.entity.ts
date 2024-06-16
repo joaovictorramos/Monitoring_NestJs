@@ -1,3 +1,4 @@
+import { DaysOfTheWeekEntity } from 'src/days-of-the-week/entities/days-of-the-week.entity';
 import { MonitorEntity } from 'src/monitor/entities/monitor.entity';
 import {
   Column,
@@ -6,6 +7,8 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   OneToMany,
+  ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 
 @Entity('matter')
@@ -31,9 +34,6 @@ export class MatterEntity {
   @Column({ name: 'end_hour', type: 'time', nullable: false })
   endHour: string;
 
-  @Column({ name: 'days_of_the_week', nullable: false })
-  daysOfTheWeek: string;
-
   @CreateDateColumn({
     name: 'created_at',
     type: 'timestamp',
@@ -47,6 +47,14 @@ export class MatterEntity {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @ManyToOne(
+    () => DaysOfTheWeekEntity,
+    (daysOfTheWeek) => daysOfTheWeek.matters,
+    { nullable: false },
+  )
+  @JoinColumn({ name: 'days_of_the_week_id' })
+  daysOfTheWeekId: DaysOfTheWeekEntity;
 
   @OneToMany(() => MonitorEntity, (monitors) => monitors.matterId)
   monitors: MonitorEntity[];

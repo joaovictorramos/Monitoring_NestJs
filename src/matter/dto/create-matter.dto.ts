@@ -6,5 +6,5 @@ export class CreateMatterDto {
   readonly period: number;
   readonly startHour: string;
   readonly endHour: string;
-  readonly daysOfTheWeek: string;
+  readonly daysOfTheWeekId: string;
 }
