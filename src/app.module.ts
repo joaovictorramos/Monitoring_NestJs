@@ -18,6 +18,8 @@ import { APP_GUARD } from '@nestjs/core';
 import { AuthGuard } from './auth/auth.guard';
 import { CachesModule } from './caches/caches.module';
 import { LoggerMiddleware } from './middleware/logger.middleware';
+import { DaysOfTheWeekModule } from './days-of-the-week/days-of-the-week.module';
+import { DaysOfTheWeekEntity } from './days-of-the-week/entities/days-of-the-week.entity';
 
 @Module({
   imports: [
@@ -35,6 +37,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
         MonitorEntity,
         MatterEntity,
         AbsenceEntity,
+        DaysOfTheWeekEntity,
       ],
       synchronize: false,
     }),
@@ -45,6 +48,7 @@ import { LoggerMiddleware } from './middleware/logger.middleware';
     AbsenceModule,
     AuthModule,
     CachesModule,
+    DaysOfTheWeekModule,
   ],
   controllers: [AppController],
   providers: [
@@ -59,6 +63,13 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(LoggerMiddleware)
-      .forRoutes('users', 'monitor', 'classroom', 'absence', 'matter');
+      .forRoutes(
+        'users',
+        'monitor',
+        'classroom',
+        'absence',
+        'matter',
+        'days-of-the-week',
+      );
   }
 }
