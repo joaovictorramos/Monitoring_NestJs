@@ -26,10 +26,6 @@ export class UpdateMonitorCommand {
 
   @IsOptional()
   @IsString()
-  readonly daysOfTheWeek?: string;
-
-  @IsOptional()
-  @IsString()
   readonly startHour?: string;
 
   @IsOptional()
@@ -47,4 +43,8 @@ export class UpdateMonitorCommand {
   @IsOptional()
   @IsString()
   readonly matterId: string;
+
+  @IsOptional()
+  @IsString()
+  readonly daysOfTheWeekIds: string[];
 }

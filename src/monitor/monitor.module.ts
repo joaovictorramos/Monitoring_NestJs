@@ -9,10 +9,11 @@ import { CachesModule } from 'src/caches/caches.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { QueryHandlers } from './queries';
 import { CommandHandlers } from './commands';
+import { DaysOfTheWeekEntity } from 'src/days-of-the-week/entities/days-of-the-week.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([MonitorEntity]),
+    TypeOrmModule.forFeature([MonitorEntity, DaysOfTheWeekEntity]),
     UsersModule,
     ClassroomModule,
     MatterModule,

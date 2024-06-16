@@ -1,8 +1,11 @@
 import { MatterEntity } from 'src/matter/entities/matter.entity';
+import { MonitorEntity } from 'src/monitor/entities/monitor.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
+  ManyToMany,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
@@ -29,6 +32,10 @@ export class DaysOfTheWeekEntity {
     default: () => 'CURRENT_TIMESTAMP',
   })
   updatedAt: Date;
+
+  @ManyToMany(() => MonitorEntity, (monitor) => monitor.daysOfTheWeekIds)
+  @JoinColumn({ name: 'monitor_id' })
+  monitorIds: MonitorEntity[];
 
   @OneToMany(() => MatterEntity, (matters) => matters.daysOfTheWeekId)
   matters: MatterEntity[];

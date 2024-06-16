@@ -12,6 +12,7 @@ import {
 import { UsersController } from 'src/users/users.controller';
 import { ClassroomController } from 'src/classroom/classroom.controller';
 import { MatterController } from 'src/matter/matter.controller';
+import { DaysOfTheWeekEntity } from 'src/days-of-the-week/entities/days-of-the-week.entity';
 
 @CommandHandler(CreateMonitorCommand)
 export class CreateMonitorHandler
@@ -20,6 +21,8 @@ export class CreateMonitorHandler
   constructor(
     @InjectRepository(MonitorEntity)
     private readonly monitorRepository: Repository<MonitorEntity>,
+    @InjectRepository(DaysOfTheWeekEntity)
+    private readonly daysOfTheWeekRepository: Repository<DaysOfTheWeekEntity>,
     private readonly usersController: UsersController,
     private readonly classroomController: ClassroomController,
     private readonly matterController: MatterController,
@@ -61,6 +64,14 @@ export class CreateMonitorHandler
       existingClassroom = null;
     }
 
+    // Se há dias da semana
+    const existingDaysOfTheWeeks = await this.daysOfTheWeekRepository.findByIds(
+      command.daysOfTheWeekIds,
+    );
+    if (!existingDaysOfTheWeeks) {
+      throw new NotFoundException('No days of the week found');
+    }
+
     // Validando o tipo de monitoria
     if (command.typeOfMonitoring !== undefined) {
       const typeOfMonitoringList = [
@@ -75,24 +86,6 @@ export class CreateMonitorHandler
       }
     }
 
-    // Validando o dia da semana
-    if (command.daysOfTheWeek !== undefined) {
-      const daysOfTheWeekList = [
-        'DOMINGO',
-        'SEGUNDA-FEIRA',
-        'TERÇA-FEIRA',
-        'QUARTA-FEIRA',
-        'QUINTA-FEIRA',
-        'SEXTA-FEIRA',
-        'SÁBADO',
-      ];
-      if (!daysOfTheWeekList.includes(command.daysOfTheWeek)) {
-        throw new InvalidRoleException(
-          'Invalid role value. Allowed value: "DOMINGO", "SEGUNDA=FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA" or "SÁBADO".',
-        );
-      }
-    }
-
     const monitor = new MonitorEntity();
     const id = uuidv4();
 
@@ -102,12 +95,12 @@ export class CreateMonitorHandler
     monitor.actualPeriod = command.actualPeriod;
     monitor.institutionalEmail = command.institutionalEmail;
     monitor.typeOfMonitoring = command.typeOfMonitoring;
-    monitor.daysOfTheWeek = command.daysOfTheWeek;
     monitor.startHour = command.startHour;
     monitor.endHour = command.endHour;
     monitor.usersId = existingUsers;
     monitor.classroomId = existingClassroom;
     monitor.matterId = existingMatters;
+    monitor.daysOfTheWeekIds = existingDaysOfTheWeeks;
     return await this.monitorRepository.save(monitor);
   }
 }

@@ -16,15 +16,13 @@ export class ValidateMonitorCredentialsPipe implements PipeTransform {
       !value.institutionalEmail === undefined ||
       !value.typeOfMonitoring ||
       !value.typeOfMonitoring === undefined ||
-      !value.daysOfTheWeek ||
-      !value.daysOfTheWeek === undefined ||
       !value.startHour ||
       !value.startHour === undefined ||
       !value.endHour ||
       !value.endHour === undefined
     ) {
       throw new MissingCredentialsException(
-        'Registration, name, institutionalEmail, typeOfMonitoring, daysOfTheWeek, startHour and endHour are requireds',
+        'Registration, name, institutionalEmail, typeOfMonitoring, startHour and endHour are requireds',
       );
     } else if (!value.usersId || value.usersId === undefined) {
       throw new NotFoundException('No users found');

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { FindOneMonitorQuery } from './findOneMonitor.query';
 import { MonitorEntity } from 'src/monitor/entities/monitor.entity';
@@ -22,7 +23,13 @@ export class FindOneMonitorHandler
   async execute(query: FindOneMonitorQuery): Promise<MonitorReturnDto> {
     const monitor = await this.monitorRepository.findOne({
       where: { id: query.id },
-      relations: ['usersId', 'classroomId', 'matterId'],
+      relations: [
+        'usersId',
+        'classroomId',
+        'matterId',
+        'matterId.daysOfTheWeekId',
+        'daysOfTheWeekIds',
+      ],
     });
     if (!monitor) {
       throw new NotFoundException('No monitor found');
@@ -35,49 +42,49 @@ export class FindOneMonitorHandler
       actualPeriod: monitor.actualPeriod,
       institutionalEmail: monitor.institutionalEmail,
       typeOfMonitoring: monitor.typeOfMonitoring,
-      daysOfTheWeek: monitor.daysOfTheWeek,
       startHour: monitor.startHour,
       endHour: monitor.endHour,
+      usersId: monitor.usersId
+        ? {
+            id: monitor.usersId.id,
+            name: monitor.usersId.name,
+            login: monitor.usersId.login,
+            password: monitor.usersId.password,
+            office: monitor.usersId.office,
+          }
+        : null,
+      classroomId: monitor.classroomId
+        ? {
+            id: monitor.classroomId.id,
+            name: monitor.classroomId.name,
+            block: monitor.classroomId.block,
+            type: monitor.classroomId.type,
+          }
+        : null,
+      matterId: monitor.matterId
+        ? {
+            id: monitor.matterId.id,
+            name: monitor.matterId.name,
+            teacher: monitor.matterId.teacher,
+            type: monitor.matterId.type,
+            period: monitor.matterId.period,
+            startHour: monitor.matterId.startHour,
+            endHour: monitor.matterId.endHour,
+            daysOfTheWeekId: monitor.matterId.daysOfTheWeekId
+              ? {
+                  id: monitor.matterId.daysOfTheWeekId.id,
+                  daysWeek: monitor.matterId.daysOfTheWeekId.daysWeek,
+                }
+              : null,
+          }
+        : null,
+      daysOfTheWeekIds: monitor.daysOfTheWeekIds
+        ? monitor.daysOfTheWeekIds.map((day) => ({
+            id: day.id,
+            daysWeek: day.daysWeek,
+          }))
+        : [],
     };
-
-    if (monitor.usersId) {
-      const usersReturnDto: UsersReturnDto = {
-        id: monitor.usersId.id,
-        name: monitor.usersId.name,
-        login: monitor.usersId.login,
-        password: monitor.usersId.password,
-        office: monitor.usersId.office,
-      };
-      monitorReturnDto.usersId = usersReturnDto;
-    }
-    if (monitor.classroomId) {
-      const classroomReturnDto: ClassroomReturnDto = {
-        id: monitor.classroomId.id,
-        name: monitor.classroomId.name,
-        block: monitor.classroomId.block,
-        type: monitor.classroomId.type,
-      };
-      monitorReturnDto.classroomId = classroomReturnDto;
-    }
-    if (monitor.matterId) {
-      const daysOfTheWeekReturnDto: DaysOfTheWeekReturnDto = {
-        id: monitor.matterId.daysOfTheWeekId.id,
-        daysWeek: monitor.matterId.daysOfTheWeekId.daysWeek,
-      };
-
-      const matterReturnDto: MatterReturnDto = {
-        id: monitor.matterId.id,
-        name: monitor.matterId.name,
-        teacher: monitor.matterId.teacher,
-        type: monitor.matterId.type,
-        period: monitor.matterId.period,
-        startHour: monitor.matterId.startHour,
-        endHour: monitor.matterId.endHour,
-        daysOfTheWeekId: daysOfTheWeekReturnDto,
-      };
-      monitorReturnDto.matterId = matterReturnDto;
-    }
-
     return monitorReturnDto;
   }
 }

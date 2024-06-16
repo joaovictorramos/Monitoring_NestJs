@@ -17,7 +17,13 @@ export class FindByIdMonitorHandler
   async execute(query: FindByIdMonitorQuery): Promise<MonitorEntity> {
     const monitor = await this.monitorRepository.findOne({
       where: { id: query.idPath },
-      relations: ['usersId', 'classroomId', 'matterId'],
+      relations: [
+        'usersId',
+        'classroomId',
+        'matterId',
+        'matterId.daysOfTheWeekId',
+        'daysOfTheWeekIds',
+      ],
     });
     if (!monitor) {
       throw new NotFoundException('No monitor found');

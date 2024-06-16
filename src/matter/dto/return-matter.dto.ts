@@ -8,5 +8,5 @@ export class MatterReturnDto {
   period: number;
   startHour: string;
   endHour: string;
-  daysOfTheWeekId?: DaysOfTheWeekReturnDto;
+  daysOfTheWeekId: DaysOfTheWeekReturnDto;
 }

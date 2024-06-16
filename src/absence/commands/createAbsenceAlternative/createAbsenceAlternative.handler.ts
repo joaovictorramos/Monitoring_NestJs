@@ -64,12 +64,12 @@ export class CreateAbsenceAlternativeHandler
     monitor.actualPeriod = existingMonitor.actualPeriod;
     monitor.institutionalEmail = existingMonitor.institutionalEmail;
     monitor.typeOfMonitoring = existingMonitor.typeOfMonitoring;
-    monitor.daysOfTheWeek = existingMonitor.daysOfTheWeek;
     monitor.startHour = existingMonitor.startHour;
     monitor.endHour = existingMonitor.endHour;
     monitor.usersId = users;
     monitor.classroomId = classroom;
     monitor.matterId = matter;
+    monitor.daysOfTheWeekIds = existingMonitor.daysOfTheWeekIds;
 
     const absence = new AbsenceEntity();
     const id = uuidv4();
