@@ -10,8 +10,8 @@ import type { RedisClientOptions } from 'redis';
     CacheModule.register<RedisClientOptions>({
       store: redisStore,
       socket: {
-        host: 'localhost',
-        port: 6379,
+        host: process.env.REDIS_HOST,
+        port: Number(process.env.REDIS_PORT),
       },
     }),
   ],
