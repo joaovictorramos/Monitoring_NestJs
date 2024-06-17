@@ -10,7 +10,6 @@ import {
   UseGuards,
   UsePipes,
 } from '@nestjs/common';
-import { ClassroomService } from './classroom.service';
 import { CreateClassroomDto } from './dto/create-classroom.dto';
 import { UpdateClassroomDto } from './dto/update-classroom.dto';
 import { ClassroomEntity } from './entities/classroom.entity';
@@ -32,7 +31,6 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 @UseGuards(RolesGuard)
 export class ClassroomController {
   constructor(
-    private readonly classroomService: ClassroomService,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
   ) {}
