@@ -27,5 +27,5 @@ export class UpdateMatterDto {
 
   @IsOptional()
   @IsString()
-  readonly daysOfTheWeek?: string;
+  readonly daysOfTheWeekId: string;
 }

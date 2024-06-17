@@ -11,7 +11,6 @@ import {
   HttpCode,
   UseGuards,
 } from '@nestjs/common';
-import { MatterService } from './matter.service';
 import { CreateMatterDto } from './dto/create-matter.dto';
 import { UpdateMatterDto } from './dto/update-matter.dto';
 import { RolesGuard } from 'src/auth/auth.roles';
@@ -31,7 +30,6 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 @UseGuards(RolesGuard)
 export class MatterController {
   constructor(
-    private readonly matterService: MatterService,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
   ) {}

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   Controller,
   Get,
@@ -9,8 +10,8 @@ import {
   UsePipes,
   HttpCode,
   UseGuards,
+  Logger,
 } from '@nestjs/common';
-import { AbsenceService } from './absence.service';
 import { CreateAbsenceDto } from './dto/create-absence.dto';
 import { UpdateAbsenceDto } from './dto/update-absence.dto';
 import { ValidateAbsenceCredentialsPipe } from './pipes/absence.pipes';
@@ -25,13 +26,15 @@ import { CreateAbsenceCommand } from './commands/create/createAbsence.command';
 import { UpdateAbsenceCommand } from './commands/update/updateAbsence.command';
 import { DeleteAbsenceCommand } from './commands/delete/deleteAbsence.command';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { FindByMonitorAbsenceQuery } from './queries/findByMonitor/findByMonitorAbsence.query';
+import { CreateAbsenceAlternativeDto } from './dto/create-absence-alternative.dto';
+import { CreateAbsenceAlternativeCommand } from './commands/createAbsenceAlternative/CreateAbsenceAlternative.command';
 
 @ApiTags('absence')
 @Controller('absence')
 @UseGuards(RolesGuard)
 export class AbsenceController {
   constructor(
-    private readonly absenceService: AbsenceService,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
   ) {}
@@ -54,6 +57,14 @@ export class AbsenceController {
     summary: 'Search for absences',
     description: 'Method responsible for searching for absences',
   })
+  @Post('createToMonitor')
+  @Roles(Role.PROFESSOR)
+  @UsePipes(new ValidateAbsenceCredentialsPipe())
+  createAbsence(@Body() absenceDto: CreateAbsenceAlternativeDto) {
+    const command = plainToClass(CreateAbsenceAlternativeCommand, absenceDto);
+    return this.commandBus.execute(command);
+  }
+
   @Get()
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findAll() {
@@ -78,6 +89,13 @@ export class AbsenceController {
     summary: 'Update absence',
     description: 'Method responsible for updating absences',
   })
+  @Get('/monitor/:monitorId')
+  @Roles(Role.PROFESSOR)
+  findByMonitor(@Param('monitorId') id: string) {
+    const query = plainToClass(FindByMonitorAbsenceQuery, { id: id });
+    return this.queryBus.execute(query);
+  }
+
   @Patch(':id')
   @Roles(Role.PROFESSOR)
   update(@Param('id') id: string, @Body() absenceDto: UpdateAbsenceDto) {

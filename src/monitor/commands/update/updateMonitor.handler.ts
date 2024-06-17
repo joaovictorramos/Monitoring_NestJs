@@ -12,6 +12,7 @@ import {
 import { UsersController } from 'src/users/users.controller';
 import { ClassroomController } from 'src/classroom/classroom.controller';
 import { MatterController } from 'src/matter/matter.controller';
+import { DaysOfTheWeekEntity } from 'src/days-of-the-week/entities/days-of-the-week.entity';
 
 @CommandHandler(UpdateMonitorCommand)
 export class UpdateMonitorHandler
@@ -21,6 +22,8 @@ export class UpdateMonitorHandler
   constructor(
     @InjectRepository(MonitorEntity)
     private readonly monitorRepository: Repository<MonitorEntity>,
+    @InjectRepository(DaysOfTheWeekEntity)
+    private readonly daysOfTheWeekRepository: Repository<DaysOfTheWeekEntity>,
     private readonly usersController: UsersController,
     private readonly classroomController: ClassroomController,
     private readonly matterController: MatterController,
@@ -31,33 +34,25 @@ export class UpdateMonitorHandler
   ): Promise<MonitorEntity> {
     const monitor = await this.monitorRepository.findOne({
       where: { id: command.idPath },
+      relations: ['usersId', 'classroomId', 'matterId', 'daysOfTheWeekIds'],
     });
+
     if (!monitor) {
-      throw new NotFoundException('No monitor found');
+      throw new NotFoundException('Monitor not found');
     }
 
-    // Se há usuário
-    const existingUsers = await this.usersController.findOne(command.usersId);
-    if (!existingUsers) {
-      throw new NotFoundException('No users found');
+    if (command.registration !== undefined) {
+      monitor.registration = command.registration;
     }
-
-    // Se há matéria
-    const existingMatters = await this.matterController.findOne(
-      command.matterId,
-    );
-    if (!existingMatters) {
-      throw new NotFoundException('No matter found');
+    if (command.name !== undefined) {
+      monitor.name = command.name;
     }
-
-    // Se há sala de aula
-    let existingClassroom = await this.classroomController.findOne(
-      command.classroomId,
-    );
-    if (command.classroomId === undefined) {
-      existingClassroom = null;
+    if (command.actualPeriod !== undefined) {
+      monitor.actualPeriod = parseInt(command.actualPeriod);
     }
-
+    if (command.institutionalEmail !== undefined) {
+      monitor.institutionalEmail = command.institutionalEmail;
+    }
     if (command.typeOfMonitoring !== undefined) {
       const typeOfMonitoringList = [
         'PRESENCIAL',
@@ -66,35 +61,55 @@ export class UpdateMonitorHandler
       ];
       if (!typeOfMonitoringList.includes(command.typeOfMonitoring)) {
         throw new InvalidRoleException(
-          'Invalid role value. Allowed value: "PRESENCIAL", "REMOTO" or "PRESENCIAL E REMOTO"',
+          'Invalid role value. Allowed values: "PRESENCIAL", "REMOTO" or "PRESENCIAL E REMOTO"',
         );
       }
+      monitor.typeOfMonitoring = command.typeOfMonitoring;
+    }
+    if (command.startHour !== undefined) {
+      monitor.startHour = command.startHour;
+    }
+    if (command.endHour !== undefined) {
+      monitor.endHour = command.endHour;
+    }
+    if (command.usersId !== undefined) {
+      const existingUsers = await this.usersController.findOne(command.usersId);
+      if (!existingUsers) {
+        throw new NotFoundException('No users found');
+      }
+      monitor.usersId = existingUsers;
+    }
+    if (command.classroomId !== undefined) {
+      const existingClassroom = await this.classroomController.findOne(
+        command.classroomId,
+      );
+      monitor.classroomId = existingClassroom;
+    }
+    if (command.matterId !== undefined) {
+      const existingMatters = await this.matterController.findOne(
+        command.matterId,
+      );
+      monitor.matterId = existingMatters;
     }
 
-    if (command.daysOfTheWeek !== undefined) {
-      const daysOfTheWeekList = [
-        'DOMINGO',
-        'SEGUNDA-FEIRA',
-        'TERÇA-FEIRA',
-        'QUARTA-FEIRA',
-        'QUINTA-FEIRA',
-        'SEXTA-FEIRA',
-        'SÁBADO',
-      ];
-      if (!daysOfTheWeekList.includes(command.daysOfTheWeek)) {
-        throw new InvalidRoleException(
-          'Invalid role value. Allowed value: "DOMINGO", "SEGUNDA-FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA" or "SÁBADO".',
-        );
+    if (command.daysOfTheWeekIds !== undefined) {
+      const daysOfTheWeekIds = await this.daysOfTheWeekRepository.findByIds(
+        command.daysOfTheWeekIds,
+      );
+      if (daysOfTheWeekIds.length !== command.daysOfTheWeekIds.length) {
+        throw new NotFoundException('Some days of the week not found');
       }
+      monitor.daysOfTheWeekIds = daysOfTheWeekIds;
     }
 
     if (
       (!command.registration && command.registration !== undefined) ||
       (!command.name && command.name !== undefined) ||
+      (!command.actualPeriod && command.actualPeriod !== undefined) ||
       (!command.institutionalEmail &&
         command.institutionalEmail !== undefined) ||
       (!command.typeOfMonitoring && command.typeOfMonitoring !== undefined) ||
-      (!command.daysOfTheWeek && command.daysOfTheWeek !== undefined) ||
+      (!command.daysOfTheWeekIds && command.daysOfTheWeekIds !== undefined) ||
       (!command.startHour && command.startHour !== undefined) ||
       (!command.endHour && command.endHour !== undefined) ||
       (!command.usersId && command.usersId !== undefined) ||
@@ -105,7 +120,6 @@ export class UpdateMonitorHandler
       );
     }
 
-    Object.assign(monitor, command);
     return await this.monitorRepository.save(monitor);
   }
 }

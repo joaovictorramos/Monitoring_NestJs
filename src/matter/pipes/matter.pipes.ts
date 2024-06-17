@@ -15,11 +15,11 @@ export class ValidateMatterCredentialsPipe implements PipeTransform {
       value.startHour === undefined ||
       !value.endHour ||
       value.endHour === undefined ||
-      !value.daysOfTheWeek ||
-      value.daysOfTheWeek === undefined
+      !value.daysOfTheWeekId ||
+      value.daysOfTheWeekId === undefined
     ) {
       throw new MissingCredentialsException(
-        'Name, teacher, type, startHour, endHour and daysOfTheWeek are required',
+        'Name, teacher, type, startHour, endHour and daysOfTheWeekId are required',
       );
     }
     return value;

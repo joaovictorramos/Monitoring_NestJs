@@ -1,5 +1,6 @@
 import { AbsenceEntity } from 'src/absence/entities/absence.entity';
 import { ClassroomEntity } from 'src/classroom/entities/classroom.entity';
+import { DaysOfTheWeekEntity } from 'src/days-of-the-week/entities/days-of-the-week.entity';
 import { MatterEntity } from 'src/matter/entities/matter.entity';
 import { UsersEntity } from 'src/users/entities/user.entity';
 import {
@@ -7,6 +8,8 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
+  JoinTable,
+  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -32,9 +35,6 @@ export class MonitorEntity {
 
   @Column({ name: 'type_of_monitoring', nullable: false })
   typeOfMonitoring: string;
-
-  @Column({ name: 'days_of_the_week', nullable: false })
-  daysOfTheWeek: string;
 
   @Column({ name: 'start_hour', type: 'time', nullable: false })
   startHour: string;
@@ -66,9 +66,28 @@ export class MonitorEntity {
 
   @ManyToOne(() => MatterEntity, (matter) => matter.monitors, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'matter_id' })
   matterId: MatterEntity;
+
+  @ManyToMany(
+    () => DaysOfTheWeekEntity,
+    (daysOfTheWeek) => daysOfTheWeek.monitorIds,
+    { cascade: true },
+  )
+  @JoinTable({
+    name: 'monitor_days_of_the_week',
+    joinColumn: {
+      name: 'monitor_id',
+      referencedColumnName: 'id',
+    },
+    inverseJoinColumn: {
+      name: 'days_of_the_week_id',
+      referencedColumnName: 'id',
+    },
+  })
+  daysOfTheWeekIds: DaysOfTheWeekEntity[];
 
   @OneToMany(() => AbsenceEntity, (absences) => absences.monitorId)
   absences: AbsenceEntity[];

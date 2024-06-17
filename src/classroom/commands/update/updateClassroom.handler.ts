@@ -32,8 +32,7 @@ export class UpdateClassroomHandler
 
     if (
       (!command.name && command.name !== undefined) ||
-      (!command.type && command.type !== undefined) ||
-      (command.isReserved == null && command.isReserved !== undefined)
+      (!command.type && command.type !== undefined)
     ) {
       throw new MissingCredentialsException(
         'Name, type and isReserved cannot be null',

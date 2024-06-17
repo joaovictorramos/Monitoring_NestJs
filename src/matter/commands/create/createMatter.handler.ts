@@ -7,7 +7,9 @@ import { v4 as uuidv4 } from 'uuid';
 import {
   AlreadyExistsException,
   InvalidRoleException,
+  NotFoundException,
 } from 'src/exceptions/entity.exceptions';
+import { DaysOfTheWeekController } from 'src/days-of-the-week/days-of-the-week.controller';
 
 @CommandHandler(CreateMatterCommand)
 export class CreateMatterHandler
@@ -16,6 +18,7 @@ export class CreateMatterHandler
   constructor(
     @InjectRepository(MatterEntity)
     private readonly matterRepository: Repository<MatterEntity>,
+    private readonly daysOfTheWeekController: DaysOfTheWeekController,
   ) {}
 
   async execute(command: CreateMatterCommand): Promise<MatterEntity> {
@@ -30,28 +33,18 @@ export class CreateMatterHandler
       );
     }
 
+    const existingDaysOfTheWeek = await this.daysOfTheWeekController.findOne(
+      command.daysOfTheWeekId,
+    );
+    if (!existingDaysOfTheWeek) {
+      throw new NotFoundException('No days of the week found');
+    }
+
     if (command.type !== undefined) {
       const typeList = ['OBRIGATÓRIA', 'OPTATIVA'];
       if (!typeList.includes(command.type)) {
         throw new InvalidRoleException(
           'Invalid role value. Allowed value: "OBRIGATÓRIA" or "OPTATIVA"',
-        );
-      }
-    }
-
-    if (command.daysOfTheWeek !== undefined) {
-      const daysOfTheWeekList = [
-        'DOMINGO',
-        'SEGUNDA-FEIRA',
-        'TERÇA-FEIRA',
-        'QUARTA-FEIRA',
-        'QUINTA-FEIRA',
-        'SEXTA-FEIRA',
-        'SÁBADO',
-      ];
-      if (!daysOfTheWeekList.includes(command.daysOfTheWeek)) {
-        throw new InvalidRoleException(
-          'Invalid role value. Allowed value: "DOMINGO", "SEGUNDA=FEIRA", "TERÇA-FEIRA", "QUARTA-FEIRA", "QUINTA-FEIRA", "SEXTA-FEIRA" or "SÁBADO".',
         );
       }
     }
@@ -66,7 +59,7 @@ export class CreateMatterHandler
     matter.period = command.period;
     matter.startHour = command.startHour;
     matter.endHour = command.endHour;
-    matter.daysOfTheWeek = command.daysOfTheWeek;
+    matter.daysOfTheWeekId = existingDaysOfTheWeek;
     return await this.matterRepository.save(matter);
   }
 }

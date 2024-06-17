@@ -50,10 +50,9 @@ export class UsersController {
     summary: 'Create user',
     description: 'Method responsible for creating users',
   })
-  @Post()
   @Roles(Role.PROFESSOR)
+  @Post('create')
   @UsePipes(new ValidateCredentialsPipe())
-  @UseGuards(RolesGuard)
   create(@Body() usersDto: UsersCreateDto): Promise<UsersEntity> {
     const command = plainToClass(CreateUsersCommand, usersDto);
     return this.commandBus.execute(command);

@@ -10,7 +10,6 @@ import {
   HttpCode,
   UseGuards,
 } from '@nestjs/common';
-import { MonitorService } from './monitor.service';
 import { CreateMonitorDto } from './dto/create-monitor.dto';
 import { UpdateMonitorDto } from './dto/update-monitor.dto';
 import { ValidateMonitorCredentialsPipe } from './pipes/monitor.pipes';
@@ -32,7 +31,6 @@ import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 @UseGuards(RolesGuard)
 export class MonitorController {
   constructor(
-    private readonly monitorService: MonitorService,
     private readonly queryBus: QueryBus,
     private readonly commandBus: CommandBus,
   ) {}

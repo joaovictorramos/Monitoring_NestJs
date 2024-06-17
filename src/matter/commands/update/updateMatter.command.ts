@@ -30,5 +30,5 @@ export class UpdateMatterCommand {
 
   @IsOptional()
   @IsString()
-  readonly daysOfTheWeek?: string;
+  readonly daysOfTheWeekId?: string;
 }

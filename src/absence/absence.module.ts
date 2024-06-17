@@ -1,5 +1,4 @@
-import { Module } from '@nestjs/common';
-import { AbsenceService } from './absence.service';
+import { forwardRef, Module } from '@nestjs/common';
 import { AbsenceController } from './absence.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AbsenceEntity } from './entities/absence.entity';
@@ -12,11 +11,12 @@ import { CommandHandlers } from './commands';
 @Module({
   imports: [
     TypeOrmModule.forFeature([AbsenceEntity]),
-    MonitorModule,
+    forwardRef(() => MonitorModule),
     CachesModule,
     CqrsModule,
   ],
   controllers: [AbsenceController],
-  providers: [AbsenceService, ...QueryHandlers, ...CommandHandlers],
+  providers: [...QueryHandlers, ...CommandHandlers],
+  exports: [TypeOrmModule],
 })
 export class AbsenceModule {}
