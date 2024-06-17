@@ -83,7 +83,7 @@ export class ClassroomController {
   @Roles(Role.PROFESSOR)
   update(
     @Param('id') id: string,
-    @Body() classrooomDto: Partial<UpdateClassroomDto>,
+    @Body() classrooomDto: UpdateClassroomDto,
   ): Promise<ClassroomEntity> {
     const command = plainToClass(UpdateClassroomCommand, classrooomDto);
     command.idPath = id;
