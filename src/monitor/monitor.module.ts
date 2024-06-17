@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { forwardRef, Module } from '@nestjs/common';
 import { MonitorController } from './monitor.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { MonitorEntity } from './entities/monitor.entity';
@@ -10,6 +10,7 @@ import { CqrsModule } from '@nestjs/cqrs';
 import { QueryHandlers } from './queries';
 import { CommandHandlers } from './commands';
 import { DaysOfTheWeekEntity } from 'src/days-of-the-week/entities/days-of-the-week.entity';
+import { AbsenceModule } from 'src/absence/absence.module';
 
 @Module({
   imports: [
@@ -17,11 +18,12 @@ import { DaysOfTheWeekEntity } from 'src/days-of-the-week/entities/days-of-the-w
     UsersModule,
     ClassroomModule,
     MatterModule,
+    forwardRef(() => AbsenceModule),
     CachesModule,
     CqrsModule,
   ],
   controllers: [MonitorController],
   providers: [MonitorController, ...QueryHandlers, ...CommandHandlers],
-  exports: [MonitorController],
+  exports: [MonitorController, TypeOrmModule],
 })
 export class MonitorModule {}

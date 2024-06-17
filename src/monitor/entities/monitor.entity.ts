@@ -66,6 +66,7 @@ export class MonitorEntity {
 
   @ManyToOne(() => MatterEntity, (matter) => matter.monitors, {
     nullable: false,
+    onDelete: 'CASCADE',
   })
   @JoinColumn({ name: 'matter_id' })
   matterId: MatterEntity;

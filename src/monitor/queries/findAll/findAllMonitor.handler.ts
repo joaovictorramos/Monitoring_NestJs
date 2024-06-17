@@ -40,7 +40,6 @@ export class FindAllMonitorHandler
     }
 
     return monitors.map((monitor) => {
-      console.log(monitor.matterId);
       const monitorReturnDto: MonitorReturnDto = {
         id: monitor.id,
         registration: monitor.registration,
