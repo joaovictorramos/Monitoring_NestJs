@@ -10,6 +10,7 @@ import {
   Delete,
   HttpCode,
   UseGuards,
+  UsePipes,
 } from '@nestjs/common';
 import { DaysOfTheWeekCreateDto } from './dto/create-days-of-the-week.dto';
 import { DaysOfTheWeekUpdateDto } from './dto/update-days-of-the-week.dto';
@@ -23,6 +24,7 @@ import { DeleteDaysOfTheWeekCommand } from './commands/delete/deleteDaysOfTheWee
 import { RolesGuard } from 'src/auth/auth.roles';
 import { Roles } from 'src/decorators/role.decorator';
 import { Role } from 'src/enums/role.enum';
+import { ValidateDaysOfTheWeekCredentialsPipe } from './pipes/daysOfTheWeek.pipes';
 
 @Controller('days-of-the-week')
 @UseGuards(RolesGuard)
@@ -34,6 +36,7 @@ export class DaysOfTheWeekController {
 
   @Post()
   @Roles(Role.PROFESSOR)
+  @UsePipes(new ValidateDaysOfTheWeekCredentialsPipe())
   create(@Body() daysOfTheWeekDto: DaysOfTheWeekCreateDto) {
     const command = plainToClass(CreateDaysOfTheWeekCommand, daysOfTheWeekDto);
     return this.commandBus.execute(command);
