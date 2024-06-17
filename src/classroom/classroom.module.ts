@@ -6,7 +6,6 @@ import {
 } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ClassroomEntity } from './entities/classroom.entity';
-import { ClassroomService } from './classroom.service';
 import { ClassroomController } from './classroom.controller';
 import { CachesModule } from 'src/caches/caches.module';
 import { IsReservedMiddleware } from 'src/middleware/classroom.middleware';
@@ -21,13 +20,8 @@ import { CommandHandlers } from './commands';
     CqrsModule,
   ],
   controllers: [ClassroomController],
-  providers: [
-    ClassroomService,
-    ClassroomController,
-    ...QueryHandlers,
-    ...CommandHandlers,
-  ],
-  exports: [ClassroomService, ClassroomController],
+  providers: [ClassroomController, ...QueryHandlers, ...CommandHandlers],
+  exports: [ClassroomController],
 })
 export class ClassroomModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
