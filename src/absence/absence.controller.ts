@@ -25,7 +25,12 @@ import { FindOneAbsenceQuery } from './queries/findOne/findOneAbsence.query';
 import { CreateAbsenceCommand } from './commands/create/createAbsence.command';
 import { UpdateAbsenceCommand } from './commands/update/updateAbsence.command';
 import { DeleteAbsenceCommand } from './commands/delete/deleteAbsence.command';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiExcludeEndpoint,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { FindByMonitorAbsenceQuery } from './queries/findByMonitor/findByMonitorAbsence.query';
 import { CreateAbsenceAlternativeDto } from './dto/create-absence-alternative.dto';
 import { CreateAbsenceAlternativeCommand } from './commands/createAbsenceAlternative/CreateAbsenceAlternative.command';
@@ -52,11 +57,7 @@ export class AbsenceController {
     return this.commandBus.execute(command);
   }
 
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Search for absences',
-    description: 'Method responsible for searching for absences',
-  })
+  @ApiExcludeEndpoint()
   @Post('createToMonitor')
   @Roles(Role.PROFESSOR)
   @UsePipes(new ValidateAbsenceCredentialsPipe())
@@ -65,6 +66,11 @@ export class AbsenceController {
     return this.commandBus.execute(command);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Search for absences',
+    description: 'Method responsible for searching for absences',
+  })
   @Get()
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findAll() {
@@ -84,11 +90,7 @@ export class AbsenceController {
     return this.queryBus.execute(query);
   }
 
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Update absence',
-    description: 'Method responsible for updating absences',
-  })
+  @ApiExcludeEndpoint()
   @Get('/monitor/:monitorId')
   @Roles(Role.PROFESSOR)
   findByMonitor(@Param('monitorId') id: string) {
@@ -96,6 +98,11 @@ export class AbsenceController {
     return this.queryBus.execute(query);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update absence',
+    description: 'Method responsible for updating absences',
+  })
   @Patch(':id')
   @Roles(Role.PROFESSOR)
   update(@Param('id') id: string, @Body() absenceDto: UpdateAbsenceDto) {

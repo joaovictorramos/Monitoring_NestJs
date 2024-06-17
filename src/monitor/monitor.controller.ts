@@ -24,7 +24,12 @@ import { CreateMonitorCommand } from './commands/create/createMonitor.command';
 import { UpdateMonitorCommand } from './commands/update/updateMonitor.command';
 import { DeleteMonitorCommand } from './commands/delete/deleteMonitor.command';
 import { FindByIdMonitorQuery } from './queries/findById/findByIdMonitor.query';
-import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiExcludeEndpoint,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 
 @ApiTags('monitor')
 @Controller('monitor')
@@ -72,11 +77,7 @@ export class MonitorController {
     return this.queryBus.execute(query);
   }
 
-  @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Search monitor by id (incomplete informations)',
-    description: 'Method responsible for searching monitor by id',
-  })
+  @ApiExcludeEndpoint()
   @Get('id')
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findById(@Param('id') id: string) {

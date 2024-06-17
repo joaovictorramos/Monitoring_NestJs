@@ -25,7 +25,9 @@ import { RolesGuard } from 'src/auth/auth.roles';
 import { Roles } from 'src/decorators/role.decorator';
 import { Role } from 'src/enums/role.enum';
 import { ValidateDaysOfTheWeekCredentialsPipe } from './pipes/daysOfTheWeek.pipes';
+import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('days-of-the-week')
 @Controller('days-of-the-week')
 @UseGuards(RolesGuard)
 export class DaysOfTheWeekController {
@@ -34,6 +36,11 @@ export class DaysOfTheWeekController {
     private readonly commandBus: CommandBus,
   ) {}
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Create days of the week',
+    description: 'Method responsible for creating days of the week',
+  })
   @Post()
   @Roles(Role.PROFESSOR)
   @UsePipes(new ValidateDaysOfTheWeekCredentialsPipe())
@@ -42,6 +49,11 @@ export class DaysOfTheWeekController {
     return this.commandBus.execute(command);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Search for days of the week',
+    description: 'Method responsible for searching for days of the week',
+  })
   @Get()
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findAll() {
@@ -50,6 +62,11 @@ export class DaysOfTheWeekController {
     return this.queryBus.execute(query);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Search days of the week by id',
+    description: 'Method responsible for searching days of the week by id',
+  })
   @Get(':id')
   @Roles(Role.PROFESSOR, Role.ALUNO)
   findOne(@Param('id') id: string) {
@@ -57,6 +74,11 @@ export class DaysOfTheWeekController {
     return this.queryBus.execute(query);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update days of the week',
+    description: 'Method responsible for updating days of the week',
+  })
   @Patch(':id')
   @Roles(Role.PROFESSOR)
   update(
@@ -68,6 +90,11 @@ export class DaysOfTheWeekController {
     return this.commandBus.execute(command);
   }
 
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Delete days of the week',
+    description: 'Method responsible for deleting days of the week',
+  })
   @Delete(':id')
   @Roles(Role.PROFESSOR)
   @HttpCode(204)
