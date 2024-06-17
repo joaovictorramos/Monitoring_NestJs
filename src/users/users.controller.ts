@@ -82,7 +82,7 @@ export class UsersController {
   @UseGuards(RolesGuard)
   update(
     @Param('id') id: string,
-    @Body() usersDto: Partial<UsersUpdateDto>,
+    @Body() usersDto: UsersUpdateDto,
   ): Promise<UsersEntity> {
     const command = plainToClass(UpdateUsersCommand, usersDto);
     command.idPath = id;
