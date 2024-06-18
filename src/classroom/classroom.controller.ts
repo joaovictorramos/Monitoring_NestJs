@@ -23,7 +23,7 @@ import { FindAllClassroomQuery } from './queries/findAll/findAllClassroom.query'
 import { FindOneClassroomQuery } from './queries/findOne/findOneClassroom.query';
 import { CreateClassroomCommand } from './commands/create/createClassroom.command';
 import { UpdateClassroomCommand } from './commands/update/updateClassroom.command';
-import { DeleteClassroomCommand } from './commands/delete/DeleteClassroom.command';
+import { DeleteClassroomCommand } from './commands/delete/deleteClassroom.command';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 
 @ApiTags('classroom')

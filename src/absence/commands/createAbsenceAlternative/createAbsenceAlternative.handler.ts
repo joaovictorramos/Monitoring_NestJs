@@ -9,7 +9,7 @@ import { MatterEntity } from 'src/matter/entities/matter.entity';
 import { ClassroomEntity } from 'src/classroom/entities/classroom.entity';
 import { MonitorEntity } from 'src/monitor/entities/monitor.entity';
 import { MonitorController } from 'src/monitor/monitor.controller';
-import { CreateAbsenceAlternativeCommand } from './CreateAbsenceAlternative.command';
+import { CreateAbsenceAlternativeCommand } from './createAbsenceAlternative.command';
 
 @CommandHandler(CreateAbsenceAlternativeCommand)
 export class CreateAbsenceAlternativeHandler

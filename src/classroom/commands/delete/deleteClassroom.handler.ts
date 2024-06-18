@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { DeleteClassroomCommand } from './DeleteClassroom.command';
+import { DeleteClassroomCommand } from './deleteClassroom.command';
 import { ClassroomEntity } from 'src/classroom/entities/classroom.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

@@ -1,5 +1,5 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
-import { CreateMatterCommand } from './CreateMatter.command';
+import { CreateMatterCommand } from './createMatter.command';
 import { MatterEntity } from 'src/matter/entities/matter.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';

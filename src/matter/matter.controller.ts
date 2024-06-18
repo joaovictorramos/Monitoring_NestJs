@@ -20,7 +20,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { plainToClass } from 'class-transformer';
 import { FindAllMatterQuery } from './queries/findAll/findAllMatter.query';
 import { FindOneMatterQuery } from './queries/findOne/findOneMatter.query';
-import { CreateMatterCommand } from './commands/create/CreateMatter.command';
+import { CreateMatterCommand } from './commands/create/createMatter.command';
 import { UpdateMatterCommand } from './commands/update/updateMatter.command';
 import { DeleteMatterCommand } from './commands/delete/deleteMatter.command';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';

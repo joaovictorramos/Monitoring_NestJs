@@ -33,7 +33,7 @@ import {
 } from '@nestjs/swagger';
 import { FindByMonitorAbsenceQuery } from './queries/findByMonitor/findByMonitorAbsence.query';
 import { CreateAbsenceAlternativeDto } from './dto/create-absence-alternative.dto';
-import { CreateAbsenceAlternativeCommand } from './commands/createAbsenceAlternative/CreateAbsenceAlternative.command';
+import { CreateAbsenceAlternativeCommand } from './commands/createAbsenceAlternative/createAbsenceAlternative.command';
 
 @ApiTags('absence')
 @Controller('absence')
