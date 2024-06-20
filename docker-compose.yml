@@ -2,18 +2,14 @@ version: '3.8'
 
 services:
   frontend:
-    build:
-      context: ./MONITORING_NESTJS
-      dockerfile: Dockerfile.backend
+    image: frontend:1.0
     ports:
-      - "80:80"
+      - "82:80"
     depends_on:
       - backend
 
   backend:
-    build:
-      context: ./MONITORING_REACTJS
-      dockerfile: Dockerfile.frontend
+    image: backend:1.0
     ports:
       - "3000:3000"
     depends_on:
@@ -40,9 +36,10 @@ services:
       - postgres_data:/var/lib/postgresql/data
 
   redis:
-    image: redis:6-alpine
+    image: redis/redis-stack:latest
     ports:
       - "6379:6379"
+      - "8001:8001"
 
 volumes:
   postgres_data:  
