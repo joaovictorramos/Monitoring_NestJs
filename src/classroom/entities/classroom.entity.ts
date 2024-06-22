@@ -15,7 +15,7 @@ export class ClassroomEntity {
   @Column({ nullable: false })
   name: string;
 
-  @Column()
+  @Column({ nullable: true })
   block: string;
 
   @Column({ nullable: false })

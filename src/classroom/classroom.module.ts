@@ -12,6 +12,7 @@ import { IsReservedMiddleware } from 'src/middleware/classroom.middleware';
 import { CqrsModule } from '@nestjs/cqrs';
 import { QueryHandlers } from './queries';
 import { CommandHandlers } from './commands';
+import { ClassroomSeed } from './seed/classroom.seed';
 
 @Module({
   imports: [
@@ -20,7 +21,12 @@ import { CommandHandlers } from './commands';
     CqrsModule,
   ],
   controllers: [ClassroomController],
-  providers: [ClassroomController, ...QueryHandlers, ...CommandHandlers],
+  providers: [
+    ClassroomController,
+    ClassroomSeed,
+    ...QueryHandlers,
+    ...CommandHandlers,
+  ],
   exports: [ClassroomController],
 })
 export class ClassroomModule implements NestModule {

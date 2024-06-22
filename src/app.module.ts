@@ -40,6 +40,7 @@ import { DaysOfTheWeekEntity } from './days-of-the-week/entities/days-of-the-wee
         DaysOfTheWeekEntity,
       ],
       synchronize: true,
+      autoLoadEntities: true,
     }),
     UsersModule,
     ClassroomModule,

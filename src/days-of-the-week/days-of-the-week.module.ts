@@ -6,6 +6,7 @@ import { CachesModule } from 'src/caches/caches.module';
 import { CqrsModule } from '@nestjs/cqrs';
 import { QueryHandlers } from './queries';
 import { CommandHandlers } from './commands';
+import { DaysOfTheWeekSeed } from './seed/days-of-the-week.seed';
 
 @Module({
   imports: [
@@ -14,7 +15,12 @@ import { CommandHandlers } from './commands';
     CqrsModule,
   ],
   controllers: [DaysOfTheWeekController],
-  providers: [DaysOfTheWeekController, ...QueryHandlers, ...CommandHandlers],
-  exports: [DaysOfTheWeekController],
+  providers: [
+    DaysOfTheWeekController,
+    DaysOfTheWeekSeed,
+    ...QueryHandlers,
+    ...CommandHandlers,
+  ],
+  exports: [DaysOfTheWeekController, ...QueryHandlers],
 })
 export class DaysOfTheWeekModule {}
