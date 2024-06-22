@@ -17,6 +17,6 @@ import { CommandHandlers } from './commands';
   ],
   controllers: [AbsenceController],
   providers: [...QueryHandlers, ...CommandHandlers],
-  exports: [TypeOrmModule],
+  exports: [TypeOrmModule, ...QueryHandlers],
 })
 export class AbsenceModule {}

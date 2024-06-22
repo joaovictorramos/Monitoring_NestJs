@@ -1,15 +1,17 @@
+/* eslint-disable prettier/prettier */
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { AbsenceEntity } from 'src/absence/entities/absence.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { v4 as uuidv4 } from 'uuid';
-import { NotFoundException } from 'src/exceptions/entity.exceptions';
+import { InvalidRoleException, NotFoundException } from 'src/exceptions/entity.exceptions';
 import { UsersEntity } from 'src/users/entities/user.entity';
 import { MatterEntity } from 'src/matter/entities/matter.entity';
 import { ClassroomEntity } from 'src/classroom/entities/classroom.entity';
 import { MonitorEntity } from 'src/monitor/entities/monitor.entity';
 import { MonitorController } from 'src/monitor/monitor.controller';
 import { CreateAbsenceAlternativeCommand } from './createAbsenceAlternative.command';
+import { FindAllAbsenceHandler } from 'src/absence/queries/findAll/findAllAbsence.handler';
 
 @CommandHandler(CreateAbsenceAlternativeCommand)
 export class CreateAbsenceAlternativeHandler
@@ -19,6 +21,7 @@ export class CreateAbsenceAlternativeHandler
     @InjectRepository(AbsenceEntity)
     private readonly absenceRepository: Repository<AbsenceEntity>,
     private readonly monitorController: MonitorController,
+    private readonly findAllAbsenceHandler: FindAllAbsenceHandler,
   ) {}
 
   async execute(
@@ -78,6 +81,17 @@ export class CreateAbsenceAlternativeHandler
     absence.date = command.date;
     absence.justification = command.justification;
     absence.monitorId = monitor;
+
+    let isRepeteDate = false;
+    const absences = await this.findAllAbsenceHandler.execute(null);
+    (await absences).map((a) => { 
+      if (a.monitorId.id == monitor.id && a.date == absence.date) {
+        isRepeteDate = true;
+      }
+    });
+    if (isRepeteDate) {
+      throw new InvalidRoleException('Monitor is already missing with this date!');
+    }
 
     return await this.absenceRepository.save(absence);
   }

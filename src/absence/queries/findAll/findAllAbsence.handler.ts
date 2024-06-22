@@ -17,7 +17,9 @@ export class FindAllAbsenceHandler
   ) {}
 
   async execute(query: FindAllAbsenceQuery): Promise<Array<AbsenceEntity>> {
-    const absence = await this.absenceRepository.find();
+    const absence = await this.absenceRepository.find({
+      relations: ['monitorId'],
+    });
     if (!absence.length) {
       throw new NotFoundException('No absences found');
     }
