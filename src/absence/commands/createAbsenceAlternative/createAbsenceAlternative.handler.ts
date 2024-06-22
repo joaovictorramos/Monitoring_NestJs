@@ -82,15 +82,23 @@ export class CreateAbsenceAlternativeHandler
     absence.justification = command.justification;
     absence.monitorId = monitor;
 
-    let isRepeteDate = false;
-    const absences = await this.findAllAbsenceHandler.execute(null);
-    (await absences).map((a) => { 
-      if (a.monitorId.id == monitor.id && a.date == absence.date) {
-        isRepeteDate = true;
+    let absences = [];
+    let isRepeteDate = false, isAbsence = true;
+    try{
+      absences = await this.findAllAbsenceHandler.execute(null);
+    } catch (err){
+      isAbsence = false
+    }
+
+    if (absences.length && isAbsence) {
+      (await absences).map((a) => { 
+        if (a.monitorId.id == monitor.id && a.date == absence.date) {
+          isRepeteDate = true;
+        }
+      });
+      if (isRepeteDate) {
+        throw new InvalidRoleException('Monitor is already missing with this date!');
       }
-    });
-    if (isRepeteDate) {
-      throw new InvalidRoleException('Monitor is already missing with this date!');
     }
 
     return await this.absenceRepository.save(absence);

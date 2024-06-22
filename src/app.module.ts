@@ -39,7 +39,7 @@ import { DaysOfTheWeekEntity } from './days-of-the-week/entities/days-of-the-wee
         AbsenceEntity,
         DaysOfTheWeekEntity,
       ],
-      synchronize: false,
+      synchronize: true,
     }),
     UsersModule,
     ClassroomModule,

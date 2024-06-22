@@ -17,7 +17,7 @@ export class AbsenceEntity {
   @Column({ nullable: false, type: 'date' })
   date: string;
 
-  @Column()
+  @Column({ nullable: true })
   justification: string;
 
   @CreateDateColumn({
