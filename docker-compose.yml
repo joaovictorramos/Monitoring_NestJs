@@ -20,7 +20,7 @@ services:
       DATABASE_PORT: 5432
       DATABASE_USER: root
       DATABASE_PASSWORD: root
-      DATABASE_NAME: monitoring_2
+      DATABASE_NAME: root
       REDIS_HOST: redis
       REDIS_PORT: 6379
 
